@@ -31,6 +31,17 @@ def log_in(self):
 def load_all(self):
     load_strukt(self)
     self.load_combo()
+    load_combo_sotr(self)
+
+def load_combo_sotr(self):
+    spis_tmp = F.otkr_f(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + 'strukt.pickle', pickl=True)
+    spis = []
+    for i in range(len(spis_tmp)):
+        spis.append(spis_tmp[i][2])
+    spis = set(spis)
+    for i in range(len(self.spis_emploe)):
+        if ' '.join(self.spis_emploe[i][3:]) in spis:
+            self.ui.comboBox_rabotn.addItem(' '.join(self.spis_emploe[i]))
 
 
 def save_strukt(self):
@@ -190,3 +201,6 @@ def check_pass(fio, parol):
 def unload(self):
     self.ui.tableWidget_struktura.clear()
     self.ui.comboBox_dolgn_red.clear()
+    self.ui.tableWidget_red_kpi.clear()
+    self.ui.tableWidget_kpi_sotr.clear()
+    self.ui.comboBox_rabotn.clear()

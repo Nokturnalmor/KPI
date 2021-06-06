@@ -1,6 +1,7 @@
 import Cust_Functions as F
 import autorization as aut
 import shabloni as shabl
+import kpi_sotr as kps
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QStyle
 from PyQt5.QtGui import QIcon
@@ -28,6 +29,10 @@ class Mywindow(QtWidgets.QMainWindow):
         self.ui.pushButton_logout.clicked.connect(lambda: aut.log_out(self))
         self.ui.pushButton_save_struktura.clicked.connect(lambda: aut.save_strukt(self))
         self.ui.comboBox_dolgn_red.currentIndexChanged.connect(lambda: shabl.vibor_shablon_rabotn(self))
+        self.ui.comboBox_rabotn.currentIndexChanged.connect(lambda: kps.set_rabotn(self))
+        self.ui.pushButton_save_red_kpi.clicked.connect(lambda: shabl.save_red_kpi(self))
+        self.ui.pushButton_del_red_kpi.clicked.connect(lambda: shabl.del_red_kpi(self))
+        self.ui.pushButton_save_sotr.clicked.connect(lambda: kps.save_sotr(self))
 
     def showdialog(self, msg):
         msg_box = QtWidgets.QMessageBox()
@@ -36,6 +41,14 @@ class Mywindow(QtWidgets.QMainWindow):
         msg_box.setWindowTitle("Внимание!")
         msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok)  # | QtWidgets.QMessageBox.Cancel)
         msg_box.exec()
+
+    def showdialogYN(self, msg):
+        msg_box = QtWidgets.QMessageBox()
+        msg_box.setIcon(QtWidgets.QMessageBox.Information)
+        msg_box.setText(msg)
+        msg_box.setWindowTitle("Внимание!")
+        msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Cancel)
+        return msg_box.exec()
 
     def actions(self):
         self.action_Smena_Parol = self.ui.action_chnge_pass
@@ -69,9 +82,16 @@ class Mywindow(QtWidgets.QMainWindow):
         self.KPITIPS = ['Непрерывный','Понижающий','Отескающий']
         self.PROC = [str(i*5) for i in range(1,20)]
 
+        self.shapka_shablonkpi = [
+            ["Цель", "Наименование КПЭ", "Ед. изм.", "Уров.вып.№1", "Уров.вып.№2", "Уров.вып.№3", "Вес КПЭ", "Тип КПЭ",
+             "Методика расчета", "Примечание"],
+            ["-", "-", "-", "50", "100", "150", "-", "-",
+             "-", "-"]]
+
     def app_icons(self):
         self.ui.pushButton_login.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogYesButton)))
         self.ui.pushButton_logout.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogNoButton)))
+        self.ui.pushButton_del_red_kpi.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_BrowserStop)))
 
     def keyReleaseEvent(self, e):
         # print(str(int(e.modifiers())) + ' ' +  str(e.key()))

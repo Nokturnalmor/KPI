@@ -10,7 +10,7 @@ import os
 
 from mydesign import Ui_MainWindow  # импорт нашего сгенерированного файла
 import sys
-
+#pyuic5 P:\Python\GUI\mydesign.ui -o P:\Python\GUI\mydesign.py
 
 class Mywindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -33,6 +33,7 @@ class Mywindow(QtWidgets.QMainWindow):
         self.ui.pushButton_save_red_kpi.clicked.connect(lambda: shabl.save_red_kpi(self))
         self.ui.pushButton_del_red_kpi.clicked.connect(lambda: shabl.del_red_kpi(self))
         self.ui.pushButton_save_sotr.clicked.connect(lambda: kps.save_sotr(self))
+        self.ui.calendarWidget.currentPageChanged.connect(self.setdate)
 
     def showdialog(self, msg):
         msg_box = QtWidgets.QMessageBox()
@@ -88,6 +89,9 @@ class Mywindow(QtWidgets.QMainWindow):
             ["-", "-", "-", "50", "100", "150", "-", "-",
              "-", "-"]]
 
+        self.ui.calendarWidget.setSelectionMode(0)
+        self.setdate(self.ui.calendarWidget.yearShown(), self.ui.calendarWidget.monthShown ())
+
     def app_icons(self):
         self.ui.pushButton_login.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogYesButton)))
         self.ui.pushButton_logout.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogNoButton)))
@@ -103,7 +107,13 @@ class Mywindow(QtWidgets.QMainWindow):
     def load_combo(self):
         self.ui.comboBox_dolgn_red.addItems(self.spis_dolg_filtr)
 
+    def setdate(self,g,m):
+        self.ui.label_period.setText(f'{self.month_name(m).capitalize()} {str(g)}')
 
+    def month_name(self, num):
+        ru = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь',
+              'октябрь', 'ноябрь', 'декабрь']
+        return ru[num - 1]
 
 
 app = QtWidgets.QApplication([])

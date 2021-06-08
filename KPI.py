@@ -34,6 +34,11 @@ class Mywindow(QtWidgets.QMainWindow):
         self.ui.pushButton_del_red_kpi.clicked.connect(lambda: shabl.del_red_kpi(self))
         self.ui.pushButton_save_sotr.clicked.connect(lambda: kps.save_sotr(self))
         self.ui.calendarWidget.currentPageChanged.connect(self.setdate)
+        self.ui.pushButton_rasschet.clicked.connect(lambda: kps.rasschet_sotr(self))
+        self.ui.pushButton_dell_line.clicked.connect(lambda: shabl.dell_line(self))
+        self.ui.pushButton_line_up.clicked.connect(lambda: shabl.line_up(self))
+
+
 
     def showdialog(self, msg):
         msg_box = QtWidgets.QMessageBox()
@@ -96,6 +101,9 @@ class Mywindow(QtWidgets.QMainWindow):
         self.ui.pushButton_login.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogYesButton)))
         self.ui.pushButton_logout.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogNoButton)))
         self.ui.pushButton_del_red_kpi.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_BrowserStop)))
+        self.ui.pushButton_dell_line.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogCancelButton)))
+
+
 
     def keyReleaseEvent(self, e):
         # print(str(int(e.modifiers())) + ' ' +  str(e.key()))

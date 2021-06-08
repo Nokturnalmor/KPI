@@ -102,10 +102,11 @@ def proverka_red_kpi(self):
             f'Сумма {self.shapka_shablonkpi[0][6]} где {self.shapka_shablonkpi[0][7]} {self.KPITIPS[0]} '
             f'должна быть равна 100, сейчас {str(proverka_summ(self,spis))}')
         return False
-    if proverka_summ_ponig(self,spis) > 100:
+    kol_yr1 = F.nom_kol_po_im_v_shap(spis,"Уров.вып.№1")
+    if proverka_summ_ponig(self,spis) > int(spis[1][kol_yr1]):
         self.showdialog(
             f'Сумма {self.shapka_shablonkpi[0][6]} где {self.shapka_shablonkpi[0][7]} {self.KPITIPS[1]} '
-            f'должна не более 100, сейчас {str(proverka_summ_ponig(self,spis))}')
+            f'должна не более {spis[1][kol_yr1]}, сейчас {str(proverka_summ_ponig(self,spis))}')
         return False
     return spis
 
@@ -174,3 +175,27 @@ def del_red_kpi(self):
         self.showdialog(f'Шаблон для {self.ui.comboBox_dolgn_red.currentText()} успешно сброшен.\n'
                         f'его не вернуть.\n'
                         f'никак.')
+
+def dell_line(self):
+    if self.ui.tableWidget_red_kpi.currentIndex().row() <= 0:
+        return
+    if self.ui.tableWidget_red_kpi.currentIndex().row() == self.ui.tableWidget_red_kpi.rowCount()-1:
+        kol_ves = F.nom_kol_po_imen(self.ui.tableWidget_red_kpi, "Вес КПЭ")
+        kol_tip = F.nom_kol_po_imen(self.ui.tableWidget_red_kpi, "Тип КПЭ")
+        for k in range(self.ui.tableWidget_red_kpi.columnCount()):
+            self.ui.tableWidget_red_kpi.item(self.ui.tableWidget_red_kpi.currentIndex().row(), k).setText('')
+        self.ui.tableWidget_red_kpi.cellWidget(self.ui.tableWidget_red_kpi.currentIndex().row(), kol_ves).setCurrentText('')
+        self.ui.tableWidget_red_kpi.cellWidget(self.ui.tableWidget_red_kpi.currentIndex().row(), kol_tip).setCurrentText('')
+    else:
+        self.ui.tableWidget_red_kpi.removeRow(self.ui.tableWidget_red_kpi.currentIndex().row())
+
+def line_up(self):
+
+    sel = self.ui.tableWidget_red_kpi.currentIndex().row()+1
+    if sel < 3:
+        return
+    kol = self.ui.tableWidget_red_kpi.currentIndex().column()
+    spis_tmp = F.spisok_iz_wtabl(self.ui.tableWidget_red_kpi, '', True)
+    spis_tmp[sel],spis_tmp[sel-1] = spis_tmp[sel - 1], spis_tmp[sel]
+    zapolit_tabl_shablon(self,spis_tmp)
+    self.ui.tableWidget_red_kpi.setCurrentCell(sel - 1,kol)

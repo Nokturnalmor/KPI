@@ -76,6 +76,7 @@ def load_strukt(self):
     spis = F.otkr_f(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + 'strukt.pickle', pickl=True)
     spis.append(['', '', ''])
     zapoln_red_tab(self, spis)
+
     return
 
 
@@ -103,7 +104,9 @@ def zapoln_red_tab(self, spis):
         if i == 0:
             self.ui.tableWidget_struktura.setCellWidget(i, 1, combo)
         self.ui.tableWidget_struktura.setCellWidget(i, 2, combo2)
-
+    for i in range(1,self.ui.tableWidget_struktura.rowCount()):
+        F.ust_color_wtab(self.ui.tableWidget_struktura, i, 0, 220, 220, 220)
+        F.ust_color_wtab(self.ui.tableWidget_struktura, i, 1, 220, 220, 220)
 
 def onStateChanged1(self):
     ch = self.sender()

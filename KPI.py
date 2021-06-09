@@ -10,7 +10,9 @@ import os
 
 from mydesign import Ui_MainWindow  # импорт нашего сгенерированного файла
 import sys
-#pyuic5 P:\Python\GUI\mydesign.ui -o P:\Python\GUI\mydesign.py
+
+
+# pyuic5 P:\Python\GUI\mydesign.ui -o P:\Python\GUI\mydesign.py
 
 class Mywindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -22,7 +24,6 @@ class Mywindow(QtWidgets.QMainWindow):
         self.actions()
         self.uiconnect()
         self.setWindowTitle("Расчет КПЭ")
-
 
     def uiconnect(self):
         self.ui.pushButton_login.clicked.connect(lambda: aut.log_in(self))
@@ -37,8 +38,6 @@ class Mywindow(QtWidgets.QMainWindow):
         self.ui.pushButton_rasschet.clicked.connect(lambda: kps.rasschet_sotr(self))
         self.ui.pushButton_dell_line.clicked.connect(lambda: shabl.dell_line(self))
         self.ui.pushButton_line_up.clicked.connect(lambda: shabl.line_up(self))
-
-
 
     def showdialog(self, msg):
         msg_box = QtWidgets.QMessageBox()
@@ -62,8 +61,6 @@ class Mywindow(QtWidgets.QMainWindow):
         self.action_new_user = self.ui.action_new_user
         self.action_new_user.triggered.connect(lambda: aut.new_user(self))
 
-
-
     def init_ui(self):
         self.ui.tabWidget.setCurrentIndex(0)
         self.ui.lineEdit_3_nParol.setVisible(False)
@@ -85,8 +82,8 @@ class Mywindow(QtWidgets.QMainWindow):
         self.spis_dolg.sort()
 
         self.spis_dolg_filtr = []
-        self.KPITIPS = ['Непрерывный','Понижающий','Отескающий']
-        self.PROC = [str(i*5) for i in range(1,20)]
+        self.KPITIPS = ['Непрерывный', 'Понижающий', 'Отескающий']
+        self.PROC = [str(i * 5) for i in range(1, 20)]
 
         self.shapka_shablonkpi = [
             ["Цель", "Наименование КПЭ", "Ед. изм.", "Уров.вып.№1", "Уров.вып.№2", "Уров.вып.№3", "Вес КПЭ", "Тип КПЭ",
@@ -95,15 +92,15 @@ class Mywindow(QtWidgets.QMainWindow):
              "-", "-"]]
 
         self.ui.calendarWidget.setSelectionMode(0)
-        self.setdate(self.ui.calendarWidget.yearShown(), self.ui.calendarWidget.monthShown ())
+        self.setdate(self.ui.calendarWidget.yearShown(), self.ui.calendarWidget.monthShown())
 
     def app_icons(self):
         self.ui.pushButton_login.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogYesButton)))
         self.ui.pushButton_logout.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogNoButton)))
         self.ui.pushButton_del_red_kpi.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_BrowserStop)))
         self.ui.pushButton_dell_line.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogCancelButton)))
-
-
+        self.ui.pushButton_del_kpi_sotr.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_BrowserStop)))
+        self.ui.pushButton_line_up.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_ArrowUp)))
 
     def keyReleaseEvent(self, e):
         # print(str(int(e.modifiers())) + ' ' +  str(e.key()))
@@ -115,7 +112,7 @@ class Mywindow(QtWidgets.QMainWindow):
     def load_combo(self):
         self.ui.comboBox_dolgn_red.addItems(self.spis_dolg_filtr)
 
-    def setdate(self,g,m):
+    def setdate(self, g, m):
         self.ui.label_period.setText(f'{self.month_name(m).capitalize()} {str(g)}')
 
     def month_name(self, num):

@@ -321,7 +321,7 @@
        </font>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_4">
        <attribute name="title">
@@ -543,7 +543,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_load_sotr">
+           <widget class="QPushButton" name="pushButton_del_kpi_sotr">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -561,8 +561,17 @@
               <pointsize>14</pointsize>
              </font>
             </property>
+            <property name="toolTip">
+             <string>Удалить КПЭ сотрудника на выбранный период.</string>
+            </property>
             <property name="text">
-             <string>Загрузить</string>
+             <string/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -750,7 +759,13 @@
              </font>
             </property>
             <property name="text">
-             <string>Ù</string>
+             <string/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -780,7 +795,7 @@
              </font>
             </property>
             <property name="text">
-             <string>-</string>
+             <string/>
             </property>
            </widget>
           </item>

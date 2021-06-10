@@ -1,5 +1,6 @@
 import Cust_Functions as F
 from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QApplication, QStyle
 
 def log_in(self):
     flag_log_in = False
@@ -25,7 +26,7 @@ def log_in(self):
         self.setWindowTitle(self.ui.comboBox_empl.currentText())
         self.ui.lineEdit_parol.setText('')
         self.spis_dolg_filtr = []
-        load_all(self)
+        #load_all(self)
 
 
 def load_all(self):
@@ -33,15 +34,26 @@ def load_all(self):
     self.load_combo()
     load_combo_sotr(self)
 
-def load_combo_sotr(self):
+def load_combo_sotr(self,ind = 0):
+    self.ui.comboBox_rabotn.clear()
     spis_tmp = F.otkr_f(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + 'strukt.pickle', pickl=True)
     spis = []
     for i in range(len(spis_tmp)):
         spis.append(spis_tmp[i][2])
     spis = set(spis)
+    shet = 0
+    name = self.ui.label_period.text()
     for i in range(len(self.spis_emploe)):
         if ' '.join(self.spis_emploe[i][3:]) in spis:
-            self.ui.comboBox_rabotn.addItem(' '.join(self.spis_emploe[i]))
+            ima = ' '.join(self.spis_emploe[i])
+            self.ui.comboBox_rabotn.addItem(ima)
+            if F.nalich_file(F.scfg(
+                    'strukt') + F.sep() + self.windowTitle() + F.sep() + name + F.sep() + name + "$" + ima + '.pickle') == True:
+                self.ui.comboBox_rabotn.setItemIcon(shet, QApplication.style().standardIcon(QStyle.SP_DialogYesButton))
+            else:
+                self.ui.comboBox_rabotn.setItemIcon(shet, QApplication.style().standardIcon(QStyle.SP_DialogNoButton))
+            shet+=1
+    self.ui.comboBox_rabotn.setCurrentIndex(ind)
 
 
 def save_strukt(self):
@@ -84,6 +96,7 @@ def zapoln_red_tab(self, spis):
     edit = {0, 1, 2}
     F.zapoln_wtabl(self, spis, self.ui.tableWidget_struktura, 0, edit, (), (), 200, True, '')
     self.ui.tableWidget_struktura.setColumnWidth(1, 400)
+    self.spis_dolg_filtr = []
     for i in range(self.ui.tableWidget_struktura.rowCount()):
         combo = QtWidgets.QComboBox()
         combo.addItem("")

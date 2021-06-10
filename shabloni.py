@@ -46,6 +46,7 @@ def zapolit_tabl_shablon(self, spis):
         combo2.currentIndexChanged.connect((lambda: onStateChanged2(self)))
         self.ui.tableWidget_red_kpi.setCellWidget(i, 6, combo2)
     F.cvet_cell_wtabl(self.ui.tableWidget_red_kpi, '', '', '-')
+    self.ui.tableWidget_red_kpi.resizeRowsToContents()
 
 
 def onStateChanged1(self):

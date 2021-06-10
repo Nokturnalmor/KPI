@@ -1,8 +1,10 @@
 import Cust_Functions as F
-
+import autorization as aut
 
 def set_rabotn(self):
     if self.windowTitle() == "Расчет КПЭ":
+        return
+    if self.ui.comboBox_rabotn.currentText() == "":
         return
     dolgn = ' '.join(self.ui.comboBox_rabotn.currentText().split(' ')[3:])
     name = self.ui.label_period.text()
@@ -16,6 +18,7 @@ def set_rabotn(self):
         if F.nalich_file(F.scfg(
                 'strukt') + F.sep() + self.windowTitle() + F.sep() + dolgn + '.pickle') == False:
             self.showdialog(f'Не найден шаблон {dolgn}')
+            self.ui.tableWidget_kpi_sotr.clear()
             return
         spis = F.otkr_f(
             F.scfg(
@@ -43,7 +46,17 @@ def zapolit_tabl_kpi(self, spis):
     self.ui.tableWidget_kpi_sotr.setColumnWidth(9, 100)
     self.ui.tableWidget_kpi_sotr.horizontalHeader().setStretchLastSection(True)
     F.cvet_cell_wtabl(self.ui.tableWidget_kpi_sotr, 'Факт. вып.', '*', '', inventir=True)
-    F.ust_color_wtab(self.ui.tableWidget_kpi_sotr, 0, F.nom_kol_po_im_v_shap(spis,'Факт. вып.'), 220, 220, 220)
+    F.dob_color_wtab(self.ui.tableWidget_kpi_sotr, 0, F.nom_kol_po_im_v_shap(spis,'Факт. вып.'), 20, 20, 20)
+    for i in range(0,self.ui.tableWidget_kpi_sotr.columnCount()):
+        F.dob_color_wtab(self.ui.tableWidget_kpi_sotr, 0, i, 30, 30, 30)
+    self.ui.tableWidget_kpi_sotr.resizeRowsToContents()
+    F.font_size(self.ui.tableWidget_kpi_sotr,F.nom_kol_po_im_v_shap(spis,'Цель'),12)
+    F.font_size(self.ui.tableWidget_kpi_sotr, F.nom_kol_po_im_v_shap(spis,'Наименование КПЭ'),10)
+    F.font_size(self.ui.tableWidget_kpi_sotr, F.nom_kol_po_im_v_shap(spis, 'Методика расчета'), 10)
+    F.font_size(self.ui.tableWidget_kpi_sotr, F.nom_kol_po_im_v_shap(spis, 'Примечание'), 10)
+    F.font_size(self.ui.tableWidget_kpi_sotr, F.nom_kol_po_im_v_shap(spis, 'Уров.вып.№1'), 18)
+    F.font_size(self.ui.tableWidget_kpi_sotr, F.nom_kol_po_im_v_shap(spis, 'Уров.вып.№2'), 18)
+    F.font_size(self.ui.tableWidget_kpi_sotr, F.nom_kol_po_im_v_shap(spis, 'Уров.вып.№3'), 18)
 
 
 def save_sotr(self):
@@ -60,7 +73,7 @@ def save_sotr(self):
             spis, pickl=True)
     self.showdialog(
         f'КПЭ на {self.ui.comboBox_rabotn.currentText()} успешно сохранен')
-    pass
+    aut.load_combo_sotr(self,self.ui.comboBox_rabotn.currentIndex())
 
 
 def proverka_dannih(self):
@@ -138,3 +151,16 @@ def rassch_nepr(spis, i, kol_fact, kol_z1, kol_z2, kol_z3):
     else:
         proc = (fact - z2) / (z3 - z2)
         return (y3 - y2) * proc + y2
+
+
+def del_kpi_sotr(self):
+    rez = self.showdialogYN(f'Будет удален КПЭ для {self.ui.comboBox_rabotn.currentText()} на {self.ui.label_period.text()}')
+    if rez == 1024:#:no 4194304
+        name = self.ui.label_period.text()
+        F.udal_file(F.scfg(
+        'strukt') + F.sep() + self.windowTitle() + F.sep() + name + F.sep() + name + "$" + self.ui.comboBox_rabotn.currentText() + '.pickle')
+        set_rabotn(self)
+        self.showdialog(f'КПЭ для {self.ui.comboBox_rabotn.currentText()} успешно удален.\n'
+                        f'его не вернуть.\n'
+                        f'никак.')
+        aut.load_combo_sotr(self,self.ui.comboBox_rabotn.currentIndex())

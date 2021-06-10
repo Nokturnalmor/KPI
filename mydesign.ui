@@ -476,8 +476,17 @@
               <pointsize>14</pointsize>
              </font>
             </property>
+            <property name="toolTip">
+             <string>Сохранить КПЭ</string>
+            </property>
             <property name="text">
-             <string>Сохранить</string>
+             <string/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -507,8 +516,17 @@
               <pointsize>14</pointsize>
              </font>
             </property>
+            <property name="toolTip">
+             <string>Рассчет КПЭ</string>
+            </property>
             <property name="text">
-             <string>Рассчет</string>
+             <string/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -614,8 +632,20 @@
               <pointsize>14</pointsize>
              </font>
             </property>
-            <property name="text">
+            <property name="toolTip">
              <string>Сохранить</string>
+            </property>
+            <property name="statusTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -638,8 +668,20 @@
               <pointsize>14</pointsize>
              </font>
             </property>
-            <property name="text">
+            <property name="toolTip">
              <string>Загрузить</string>
+            </property>
+            <property name="statusTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -697,8 +739,17 @@
               <pointsize>14</pointsize>
              </font>
             </property>
-            <property name="text">
+            <property name="toolTip">
              <string>Сохранить</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -727,8 +778,17 @@
               <pointsize>14</pointsize>
              </font>
             </property>
+            <property name="toolTip">
+             <string>Удалить</string>
+            </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -757,6 +817,9 @@
               <family>Wingdings</family>
               <pointsize>14</pointsize>
              </font>
+            </property>
+            <property name="toolTip">
+             <string>Поднять строку на уровень вверх</string>
             </property>
             <property name="text">
              <string/>
@@ -794,8 +857,17 @@
               <pointsize>14</pointsize>
              </font>
             </property>
+            <property name="toolTip">
+             <string>Удалить строку</string>
+            </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -842,8 +914,17 @@
             <pointsize>14</pointsize>
            </font>
           </property>
-          <property name="text">
+          <property name="toolTip">
            <string>Сохранить</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
           </property>
          </widget>
         </item>

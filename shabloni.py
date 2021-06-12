@@ -80,73 +80,99 @@ def proverka_red_kpi(self):
     for j in range(3, 6):
         if F.is_numeric(self.ui.tableWidget_red_kpi.item(0, j).text()) == False:
             self.showdialog(f'{self.shapka_shablonkpi[0][j]} не является числом')
+            F.migat(self, self.ui.tableWidget_red_kpi, 0, j)
             return False
     for i in range(1, self.ui.tableWidget_red_kpi.rowCount()):
         if proverka_stroki_zap(self, i) == False:
             return False
-    spis_tmp = F.spisok_iz_wtabl(self.ui.tableWidget_red_kpi,'',True)
+
+    spis_tmp = F.spisok_iz_wtabl(self.ui.tableWidget_red_kpi, '', True)
     spis = []
+    nom_kol_y1 = F.nom_kol_po_im_v_shap(spis_tmp, self.shapka_shablonkpi[0][3])
+    nom_kol_y2 = F.nom_kol_po_im_v_shap(spis_tmp, self.shapka_shablonkpi[0][4])
+    nom_kol_y3 = F.nom_kol_po_im_v_shap(spis_tmp, self.shapka_shablonkpi[0][5])
+    nom_kol_tip = F.nom_kol_po_im_v_shap(spis_tmp, self.shapka_shablonkpi[0][7])
     spis.append(spis_tmp[0])
-    for i in range(1, len(spis_tmp)):
+    spis.append(spis_tmp[1])
+    for i in range(2, len(spis_tmp)):
         flag_pust = True
         for j in range(len(spis_tmp[i])):
             if spis_tmp[i][j] != '':
                 flag_pust = False
                 break
         if flag_pust == False:
+            for j in range(len(spis_tmp[i])):
+                spis_tmp[i][j] = spis_tmp[i][j].strip()
             spis.append(spis_tmp[i])
+        if spis_tmp[i][nom_kol_tip] != self.KPITIPS[0]:
+            spis_tmp[i][nom_kol_y1] = '-'
+            spis_tmp[i][nom_kol_y2] = '-'
+            spis_tmp[i][nom_kol_y3] = '-'
     if len(spis) == 2:
         self.showdialog(f'Таблица не может быть пустой')
         return False
-    if proverka_summ(self,spis) != 100:
+    if proverka_summ(self, spis) != 100:
         self.showdialog(
             f'Сумма {self.shapka_shablonkpi[0][6]} где {self.shapka_shablonkpi[0][7]} {self.KPITIPS[0]} '
-            f'должна быть равна 100, сейчас {str(proverka_summ(self,spis))}')
+            f'должна быть равна 100, сейчас {str(proverka_summ(self, spis))}')
         return False
-    kol_yr1 = F.nom_kol_po_im_v_shap(spis,"Уров.вып.№1")
-    if proverka_summ_ponig(self,spis) > int(spis[1][kol_yr1]):
+
+    if proverka_summ_ponig(self, spis) > int(spis[1][nom_kol_y1]):
         self.showdialog(
             f'Сумма {self.shapka_shablonkpi[0][6]} где {self.shapka_shablonkpi[0][7]} {self.KPITIPS[1]} '
-            f'должна не более {spis[1][kol_yr1]}, сейчас {str(proverka_summ_ponig(self,spis))}')
+            f'должна не более {spis[1][nom_kol_y1]}, сейчас {str(proverka_summ_ponig(self, spis))}')
         return False
     return spis
 
 
-def proverka_summ(self,spis):
+def proverka_summ(self, spis):
     summ = 0
     for i in range(1, len(spis)):
         if spis[i][7] == self.KPITIPS[0]:
             summ += int(spis[i][6])
     return summ
 
-def proverka_summ_ponig(self,spis):
+
+def proverka_summ_ponig(self, spis):
     summ = 0
     for i in range(1, len(spis)):
         if spis[i][7] == self.KPITIPS[1]:
             summ += int(spis[i][6])
     return summ
 
+
 def proverka_stroki_zap(self, i):
     spis_kol_numeric = [3, 4, 5, 6]
     flag_vse = True
-    for j in range(self.ui.tableWidget_red_kpi.columnCount()-1):
-        if self.ui.tableWidget_red_kpi.item(i, j).text() != "":
+    flag_nepr = self.ui.tableWidget_red_kpi.item(i, F.nom_kol_po_imen(self.ui.tableWidget_red_kpi,
+                                                             self.shapka_shablonkpi[0][7])).text() == self.KPITIPS[
+        0]
+    for j in range(self.ui.tableWidget_red_kpi.columnCount() - 1):
+        if flag_nepr and self.ui.tableWidget_red_kpi.item(i, j).text() != "":
             if flag_vse == True:
                 for k in range(self.ui.tableWidget_red_kpi.columnCount() - 1):
                     if self.ui.tableWidget_red_kpi.item(i, k).text() == "":
-                        self.showdialog(f'{self.shapka_shablonkpi[0][k]}, строка {i} не заполнена')
+                        self.showdialog(f'{self.shapka_shablonkpi[0][k]}, строка {i + 1} не заполнена')
+                        F.migat(self, self.ui.tableWidget_red_kpi, i, k)
                         return False
             if j in spis_kol_numeric:
-                if F.is_numeric(self.ui.tableWidget_red_kpi.item(i, j).text()) == False:
-                    self.showdialog(f'{self.shapka_shablonkpi[0][j]}, строка {i} не число')
+                if flag_nepr and F.is_numeric(self.ui.tableWidget_red_kpi.item(i, j).text()) == False:
+                    self.showdialog(f'{self.shapka_shablonkpi[0][j]}, строка {i + 1} не число')
+                    F.migat(self, self.ui.tableWidget_red_kpi, i, j)
                     return False
             flag_vse = False
-    if flag_vse == False:
-        if int(self.ui.tableWidget_red_kpi.item(i, 3).text())+1 >= int(self.ui.tableWidget_red_kpi.item(i, 4).text()):
-            self.showdialog(f'{self.shapka_shablonkpi[0][3]}, строка {i} не может быть больше/равна {self.shapka_shablonkpi[0][4]}')
-            return False
-        if int(self.ui.tableWidget_red_kpi.item(i, 4).text())+1 >= int(self.ui.tableWidget_red_kpi.item(i, 5).text()):
-            self.showdialog(f'{self.shapka_shablonkpi[0][4]}, строка {i} не может быть больше/равна {self.shapka_shablonkpi[0][5]}')
+    if flag_nepr and flag_vse == False:
+        if int(self.ui.tableWidget_red_kpi.item(i, 4).text()) < int(self.ui.tableWidget_red_kpi.item(i, 5).text()) and \
+                int(self.ui.tableWidget_red_kpi.item(i, 4).text()) > int(
+            self.ui.tableWidget_red_kpi.item(i, 3).text()) or \
+                int(self.ui.tableWidget_red_kpi.item(i, 4).text()) > int(
+            self.ui.tableWidget_red_kpi.item(i, 5).text()) and \
+                int(self.ui.tableWidget_red_kpi.item(i, 4).text()) < int(self.ui.tableWidget_red_kpi.item(i, 3).text()):
+            pass
+        else:
+            self.showdialog(
+                f'{self.shapka_shablonkpi[0][4]}, строка {i + 1} не может быть вне {self.shapka_shablonkpi[0][3]},{self.shapka_shablonkpi[0][5]} ')
+            F.migat(self, self.ui.tableWidget_red_kpi, i, 4, 2)
             return False
     if flag_vse == True:
         return True
@@ -164,11 +190,13 @@ def save_red_kpi(self):
                 rez, pickl=True)
         self.showdialog(
             f'Шаблон КПЭ на {self.ui.comboBox_dolgn_red.currentText()} успешно сохранен')
+        vibor_shablon_rabotn(self)
     return
+
 
 def del_red_kpi(self):
     rez = self.showdialogYN(f'Будет сброшен шаблон для {self.ui.comboBox_dolgn_red.currentText()}')
-    if rez == 1024:#:no 4194304
+    if rez == 1024:  #:no 4194304
         F.udal_file(F.scfg(
             'strukt') + F.sep() + self.windowTitle() + F.sep() + self.ui.comboBox_dolgn_red.currentText() + '.pickle')
 
@@ -177,26 +205,29 @@ def del_red_kpi(self):
                         f'его не вернуть.\n'
                         f'никак.')
 
+
 def dell_line(self):
     if self.ui.tableWidget_red_kpi.currentIndex().row() <= 0:
         return
-    if self.ui.tableWidget_red_kpi.currentIndex().row() == self.ui.tableWidget_red_kpi.rowCount()-1:
+    if self.ui.tableWidget_red_kpi.currentIndex().row() == self.ui.tableWidget_red_kpi.rowCount() - 1:
         kol_ves = F.nom_kol_po_imen(self.ui.tableWidget_red_kpi, "Вес КПЭ")
         kol_tip = F.nom_kol_po_imen(self.ui.tableWidget_red_kpi, "Тип КПЭ")
         for k in range(self.ui.tableWidget_red_kpi.columnCount()):
             self.ui.tableWidget_red_kpi.item(self.ui.tableWidget_red_kpi.currentIndex().row(), k).setText('')
-        self.ui.tableWidget_red_kpi.cellWidget(self.ui.tableWidget_red_kpi.currentIndex().row(), kol_ves).setCurrentText('')
-        self.ui.tableWidget_red_kpi.cellWidget(self.ui.tableWidget_red_kpi.currentIndex().row(), kol_tip).setCurrentText('')
+        self.ui.tableWidget_red_kpi.cellWidget(self.ui.tableWidget_red_kpi.currentIndex().row(),
+                                               kol_ves).setCurrentText('')
+        self.ui.tableWidget_red_kpi.cellWidget(self.ui.tableWidget_red_kpi.currentIndex().row(),
+                                               kol_tip).setCurrentText('')
     else:
         self.ui.tableWidget_red_kpi.removeRow(self.ui.tableWidget_red_kpi.currentIndex().row())
 
-def line_up(self):
 
-    sel = self.ui.tableWidget_red_kpi.currentIndex().row()+1
+def line_up(self):
+    sel = self.ui.tableWidget_red_kpi.currentIndex().row() + 1
     if sel < 3:
         return
     kol = self.ui.tableWidget_red_kpi.currentIndex().column()
     spis_tmp = F.spisok_iz_wtabl(self.ui.tableWidget_red_kpi, '', True)
-    spis_tmp[sel],spis_tmp[sel-1] = spis_tmp[sel - 1], spis_tmp[sel]
-    zapolit_tabl_shablon(self,spis_tmp)
-    self.ui.tableWidget_red_kpi.setCurrentCell(sel - 1,kol)
+    spis_tmp[sel], spis_tmp[sel - 1] = spis_tmp[sel - 1], spis_tmp[sel]
+    zapolit_tabl_shablon(self, spis_tmp)
+    self.ui.tableWidget_red_kpi.setCurrentCell(sel - 2, kol)

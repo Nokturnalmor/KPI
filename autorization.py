@@ -12,7 +12,7 @@ def log_in(self):
     if admin(self):
         flag_log_in = True
     if not flag_log_in:
-        rez_challenge = check_pass(self.ui.comboBox_empl.currentText(), self.ui.lineEdit_parol.text())
+        rez_challenge = True#check_pass(self.ui.comboBox_empl.currentText(), self.ui.lineEdit_parol.text())
         if rez_challenge is False:
             # F.msgbox('Не верный пароль')
             self.showdialog('Не верный пароль')
@@ -31,20 +31,26 @@ def log_in(self):
 
 def load_all(self):
     load_strukt(self)
+    load_filtr(self)
     self.load_combo()
     load_combo_sotr(self)
 
 def load_combo_sotr(self,ind = 0):
     self.ui.comboBox_rabotn.clear()
     spis_tmp = F.otkr_f(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + 'strukt.pickle', pickl=True)
+    spis_filtr = F.otkr_f(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + 'filtr.pickle', pickl=True)
     spis = []
     for i in range(len(spis_tmp)):
         spis.append(spis_tmp[i][2])
     spis = set(spis)
+    filtr = []
+    for i in range(1,len(spis_filtr)):
+        filtr.append(spis_filtr[i][0])
+    filtr = set(filtr)
     shet = 0
     name = self.ui.label_period.text()
     for i in range(len(self.spis_emploe)):
-        if ' '.join(self.spis_emploe[i][3:]) in spis:
+        if ' '.join(self.spis_emploe[i][3:]) in spis and ' '.join(self.spis_emploe[i]) not in filtr:
             ima = ' '.join(self.spis_emploe[i])
             self.ui.comboBox_rabotn.addItem(ima)
             if F.nalich_file(F.scfg(
@@ -76,7 +82,76 @@ def save_strukt(self):
         else:
             spis.append(tmp_spis[i])
     F.zap_f(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + 'strukt.pickle', spis, pickl=True)
+    spis_filtr = F.spisok_iz_wtabl(self.ui.tableWidget_filtr,'',False)
+    spis_filtr.pop()
+    spis_filtr_tmp = set()
+    for i in spis_filtr:
+        spis_filtr_tmp.add(i[0])
+    spis_filtr_tmp.discard('')
+    spis_filtr_tmp = list(spis_filtr_tmp)
+    spis_filtr_tmp.sort()
+    spis_filtr = []
+    for i in spis_filtr_tmp:
+        spis_filtr.append([i])
+    spis_filtr.insert(0,["Сотрудники"])
+    F.zap_f(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + 'filtr.pickle', spis_filtr, pickl=True)
+
     self.showdialog(f'Структура отдела {otdel} успешно сохранена')
+
+
+def load_filtr(self):
+    if not F.nalich_file(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep()):
+        F.sozd_dir(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep())
+    if not F.nalich_file(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + 'filtr.pickle'):
+        spis = [["Сотрудники"]]
+        F.zap_f(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + 'filtr.pickle', spis, pickl=True)
+    spis = F.otkr_f(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + 'filtr.pickle', pickl=True)
+    spis.append([''])
+    zapoln_filtr(self, spis)
+
+
+def zapoln_filtr(self, spis):
+    edit = {}
+    F.zapoln_wtabl(self, spis, self.ui.tableWidget_filtr, 0, edit, (), (), 200, True, '')
+    #self.ui.tableWidget_filtr.setColumnWidth(0, 400)
+    spis_tmp = F.otkr_f(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + 'filtr.pickle', pickl=True)
+    spis_tmp_tek = F.spisok_iz_wtabl(self.ui.tableWidget_struktura)
+    spis_tmp_tek2 = []
+    for i in range(len(spis_tmp_tek)-1):
+        spis_tmp_tek2.append(spis_tmp_tek[i][2])
+
+    spis_tmp2 = []
+    for i in range(len(self.spis_emploe)) :
+        if ' '.join(self.spis_emploe[i][3:]) in spis_tmp_tek2:
+            spis_tmp2.append(' '.join(self.spis_emploe[i]))
+
+    spis_filtr = set()
+    for i in range(1,len(spis_tmp)):
+        spis_filtr.add(spis_tmp[i][0])
+    for i in range(len(spis_tmp2)):
+        spis_filtr.add(spis_tmp2[i])
+    spis_filtr = list(spis_filtr)
+    spis_filtr.sort()
+
+    for i in range(self.ui.tableWidget_filtr.rowCount()):
+        combo = QtWidgets.QComboBox()
+        combo.addItem("")
+        for item in spis_filtr:
+            combo.addItem(item)
+            if self.ui.tableWidget_filtr.item(i, 0).text() == item:
+                combo.setCurrentText(item)
+        combo.currentIndexChanged.connect((lambda: onStateChanged2(self)))
+        self.ui.tableWidget_filtr.setCellWidget(i, 0, combo)
+
+def onStateChanged2(self):
+    ch = self.sender()
+    ix = self.ui.tableWidget_filtr.indexAt(ch.pos())
+    print(ix.row(), ix.column(), ch.currentText())
+    self.ui.tableWidget_filtr.item(ix.row(), ix.column()).setText(ch.currentText())
+    if self.ui.tableWidget_filtr.rowCount() - 1 == ix.row() and ch.currentText() != '':
+        spis = F.spisok_iz_wtabl(self.ui.tableWidget_filtr, '', True)
+        spis.append([""])
+        zapoln_filtr(self, spis)
 
 
 def load_strukt(self):
@@ -137,6 +212,7 @@ def onStateChanged(self):
         spis = F.spisok_iz_wtabl(self.ui.tableWidget_struktura, '', True)
         spis.append(["", "", ""])
         zapoln_red_tab(self, spis)
+        load_filtr(self)
 
 
 def new_user(self):

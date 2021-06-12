@@ -2,10 +2,12 @@ import Cust_Functions as F
 import autorization as aut
 import shabloni as shabl
 import kpi_sotr as kps
+import vnesh as vnsh
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QApplication, QStyle
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWinExtras import QtWin
+
 import os
 
 from mydesign import Ui_MainWindow  # импорт нашего сгенерированного файла
@@ -13,7 +15,7 @@ import sys
 
 
 # pyuic5 P:\Python\GUI\mydesign.ui -o P:\Python\GUI\mydesign.py
-
+# pyinstaller.exe --onefile --noconsole KPI.py
 class Mywindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(Mywindow, self).__init__()
@@ -101,8 +103,9 @@ class Mywindow(QtWidgets.QMainWindow):
         self.ui.calendarWidget.setSelectionMode(0)
         self.setdate(self.ui.calendarWidget.yearShown(), self.ui.calendarWidget.monthShown())
 
-        pixmap = QtGui.QPixmap(os.path.join("icons", "001.jpg"))
+        pixmap = QtGui.QPixmap(os.path.join("icons", "001.png"))
         self.ui.label_img.setPixmap(pixmap)
+
 
     def app_icons(self):
         self.ui.pushButton_login.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogYesButton)))
@@ -156,13 +159,14 @@ class Mywindow(QtWidgets.QMainWindow):
 
     def tab_click5(self):
         aut.load_strukt(self)
+        aut.load_filtr(self)
 
     def tab_click4(self):
         aut.load_strukt(self)
         self.load_combo()
 
     def tab_click3(self):
-        pass
+        vnsh.zapoln_vnsh_tabl(self)
 
     def tab_click2(self):
         aut.load_combo_sotr(self)
@@ -181,6 +185,9 @@ class Mywindow(QtWidgets.QMainWindow):
             spis = F.otkr_f(F.scfg(
             'strukt') + F.sep() + self.windowTitle() + F.sep() + period + F.sep()+i)
 
+            if kps.proverka_dannih(self,spis) == False:
+                continue
+
             kol_fact = F.nom_kol_po_im_v_shap(spis, 'Факт. вып.')
             kol_tip = F.nom_kol_po_im_v_shap(spis, "Тип КПЭ")
             kol_z1 = F.nom_kol_po_im_v_shap(spis, "Уров.вып.№1")
@@ -197,6 +204,7 @@ class Mywindow(QtWidgets.QMainWindow):
             shet+=1
         summ = round(summ/shet,1)
         self.ui.label_kpi_otd.setText(str(summ))
+
 
 
 

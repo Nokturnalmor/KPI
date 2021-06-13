@@ -3,11 +3,10 @@ import autorization as aut
 import shabloni as shabl
 import kpi_sotr as kps
 import vnesh as vnsh
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QStyle
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWinExtras import QtWin
-
 import os
 
 from mydesign import Ui_MainWindow  # импорт нашего сгенерированного файла
@@ -27,23 +26,23 @@ class Mywindow(QtWidgets.QMainWindow):
         self.actions()
         self.uiconnect()
 
-
     def uiconnect(self):
-        self.ui.pushButton_login.clicked.connect(lambda: aut.log_in(self))
-        self.ui.pushButton_logout.clicked.connect(lambda: aut.log_out(self))
-        self.ui.pushButton_save_struktura.clicked.connect(lambda: aut.save_strukt(self))
-        self.ui.comboBox_dolgn_red.currentIndexChanged.connect(lambda: shabl.vibor_shablon_rabotn(self))
-        self.ui.comboBox_rabotn.currentIndexChanged.connect(lambda: kps.set_rabotn(self))
-        self.ui.pushButton_save_red_kpi.clicked.connect(lambda: shabl.save_red_kpi(self))
-        self.ui.pushButton_del_red_kpi.clicked.connect(lambda: shabl.del_red_kpi(self))
-        self.ui.pushButton_save_sotr.clicked.connect(lambda: kps.save_sotr(self))
-        self.ui.calendarWidget.currentPageChanged.connect(self.setdate)
-        self.ui.pushButton_rasschet.clicked.connect(lambda: kps.rasschet_sotr(self))
-        self.ui.pushButton_dell_line.clicked.connect(lambda: shabl.dell_line(self))
-        self.ui.pushButton_line_up.clicked.connect(lambda: shabl.line_up(self))
+        self.ui.btn_login.clicked.connect(lambda: aut.log_in(self))
+        self.ui.btn_logout.clicked.connect(lambda: aut.log_out(self))
+        self.ui.btn_save_struktura.clicked.connect(lambda: aut.save_strukt(self))
+        self.ui.cmb_dolgn_red.currentIndexChanged.connect(lambda: shabl.vibor_shablon_rabotn(self))
+        self.ui.cmb_rabotn.currentIndexChanged.connect(lambda: kps.set_rabotn(self))
+        self.ui.btn_save_red_kpi.clicked.connect(lambda: shabl.save_red_kpi(self))
+        self.ui.btn_del_red_kpi.clicked.connect(lambda: shabl.del_red_kpi(self))
+        self.ui.btn_save_sotr.clicked.connect(lambda: kps.save_sotr(self))
+        self.ui.clnd.currentPageChanged.connect(self.setdate)
+        self.ui.btn_rasschet.clicked.connect(lambda: kps.rasschet_sotr(self))
+        self.ui.btn_dell_line.clicked.connect(lambda: shabl.dell_line(self))
+        self.ui.btn_line_up.clicked.connect(lambda: shabl.line_up(self))
         self.ui.tabWidget.currentChanged.connect(self.tab_click)
-        self.ui.pushButton_del_kpi_sotr.clicked.connect(lambda: kps.del_kpi_sotr(self))
-
+        self.ui.btn_del_kpi_sotr.clicked.connect(lambda: kps.del_kpi_sotr(self))
+        self.ui.btn_save_vn.clicked.connect(lambda: vnsh.save_vn(self))
+        self.ui.tbl_kpi_vnesh.cellChanged.connect(lambda: vnsh.podschet(self))
 
     def showdialog(self, msg):
         msg_box = QtWidgets.QMessageBox()
@@ -69,19 +68,19 @@ class Mywindow(QtWidgets.QMainWindow):
 
     def init_ui(self):
         self.ui.tabWidget.setCurrentIndex(0)
-        self.ui.lineEdit_3_nParol.setVisible(False)
-        self.ui.lineEdit_3_nParol_2.setVisible(False)
+        self.ui.le_3_nParol.setVisible(False)
+        self.ui.le_3_nParol_2.setVisible(False)
         self.spis_emploe = F.otkr_f(F.tcfg('employee'), True, ',')
-        F.ust_cvet_videl_tab(self.ui.tableWidget_struktura)
-        F.ust_cvet_videl_tab(self.ui.tableWidget_red_kpi)
-        F.ust_cvet_videl_tab(self.ui.tableWidget_kpi_sotr)
-        F.ust_cvet_videl_tab(self.ui.tableWidget_kpi_vnesh)
-        F.ust_cvet_videl_tab(self.ui.calendarWidget)
+        F.ust_cvet_videl_tab(self.ui.tbl_struktura)
+        F.ust_cvet_videl_tab(self.ui.tbl_red_kpi)
+        F.ust_cvet_videl_tab(self.ui.tbl_kpi_sotr)
+        F.ust_cvet_videl_tab(self.ui.tbl_kpi_vnesh)
+        F.ust_cvet_videl_tab(self.ui.clnd)
 
         self.spis_str_emploee = []
         for i in self.spis_emploe:
             self.spis_str_emploee.append(' '.join(i))
-        self.ui.comboBox_empl.addItems(self.spis_str_emploee)
+        self.ui.cmb_empl.addItems(self.spis_str_emploee)
         self.regim_new_parol = False
 
         self.spis_dolg = []
@@ -100,45 +99,44 @@ class Mywindow(QtWidgets.QMainWindow):
             ["-", "-", "-", "50", "100", "150", "-", "-",
              "-", "-"]]
 
-        self.ui.calendarWidget.setSelectionMode(0)
-        self.setdate(self.ui.calendarWidget.yearShown(), self.ui.calendarWidget.monthShown())
+        self.ui.clnd.setSelectionMode(0)
+        self.setdate(self.ui.clnd.yearShown(), self.ui.clnd.monthShown())
 
         pixmap = QtGui.QPixmap(os.path.join("icons", "001.png"))
-        self.ui.label_img.setPixmap(pixmap)
-
+        self.ui.l_img.setPixmap(pixmap)
 
     def app_icons(self):
-        self.ui.pushButton_login.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogYesButton)))
-        self.ui.pushButton_logout.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogNoButton)))
-        self.ui.pushButton_del_red_kpi.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogDiscardButton)))
-        self.ui.pushButton_dell_line.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogCancelButton)))
-        self.ui.pushButton_del_kpi_sotr.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogDiscardButton)))
-        self.ui.pushButton_line_up.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_ArrowUp)))
-        self.ui.pushButton_save_struktura.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton)))
-        self.ui.pushButton_save_red_kpi.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton)))
-        self.ui.pushButton_save_vn.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton)))
-        self.ui.pushButton_load_vn.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogOpenButton)))
-        self.ui.pushButton_save_sotr.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton)))
-        self.ui.pushButton_rasschet.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_FileDialogDetailedView)))
-        self.ui.pushButton_del_kpi_sotr.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogDiscardButton)))
+        self.ui.btn_login.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogYesButton)))
+        self.ui.btn_logout.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogNoButton)))
+        self.ui.btn_del_red_kpi.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogDiscardButton)))
+        self.ui.btn_dell_line.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogCancelButton)))
+        self.ui.btn_del_kpi_sotr.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogDiscardButton)))
+        self.ui.btn_line_up.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_ArrowUp)))
+        self.ui.btn_save_struktura.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton)))
+        self.ui.btn_save_red_kpi.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton)))
+        self.ui.btn_save_vn.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton)))
+        self.ui.btn_load_vn.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogOpenButton)))
+        self.ui.btn_save_sotr.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton)))
+        self.ui.btn_rasschet.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_FileDialogDetailedView)))
+        self.ui.btn_del_kpi_sotr.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogDiscardButton)))
 
     def keyReleaseEvent(self, e):
         # print(str(int(e.modifiers())) + ' ' +  str(e.key()))
-        if self.ui.lineEdit_parol.hasFocus():
+        if self.ui.le_parol.hasFocus():
             if e.key() == 16777220:
-                self.ui.lineEdit_parol.clearFocus()
+                self.ui.le_parol.clearFocus()
                 aut.log_in(self)
 
     def load_combo(self):
-        self.ui.comboBox_dolgn_red.clear()
-        self.ui.comboBox_dolgn_red.addItems(self.spis_dolg_filtr)
+        self.ui.cmb_dolgn_red.clear()
+        self.ui.cmb_dolgn_red.addItems(self.spis_dolg_filtr)
 
     def setdate(self, g, m):
-        self.ui.label_period.setText(f'{self.month_name(m).capitalize()} {str(g)}')
+        self.ui.l_period.setText(f'{self.month_name(m).capitalize()} {str(g)}')
         self.tab_click1()
 
-
-    def month_name(self, num):
+    @staticmethod
+    def month_name(num):
         ru = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь',
               'октябрь', 'ноябрь', 'декабрь']
         return ru[num - 1]
@@ -172,20 +170,22 @@ class Mywindow(QtWidgets.QMainWindow):
         aut.load_combo_sotr(self)
 
     def tab_click1(self):
-        self.ui.label_kpi_otd.setText(str(0))
+        self.ui.l_kpi_otd.setText(str(0))
         if self.windowTitle() == 'Расчет КПЭ':
             return
-        period = self.ui.label_period.text()
+        period = self.ui.l_period.text()
         if F.nalich_file(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + period + F.sep()) == False:
             return
         spis_files = F.spis_files(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + period + F.sep())[0]
         summ = 0
-        shet= 0
+        shet = 0
         for i in spis_files[2]:
+            if "$vn" in i:
+                continue
             spis = F.otkr_f(F.scfg(
-            'strukt') + F.sep() + self.windowTitle() + F.sep() + period + F.sep()+i)
+                'strukt') + F.sep() + self.windowTitle() + F.sep() + period + F.sep() + i)
 
-            if kps.proverka_dannih(self,spis) == False:
+            if kps.proverka_dannih(self, spis) == False:
                 continue
 
             kol_fact = F.nom_kol_po_im_v_shap(spis, 'Факт. вып.')
@@ -201,11 +201,25 @@ class Mywindow(QtWidgets.QMainWindow):
                     summ -= int(spis[i][kol_fact]) * int(spis[i][kol_ves])
                 if spis[i][kol_tip] == self.KPITIPS[2]:
                     summ -= summ * int(spis[i][kol_fact])
-            shet+=1
-        summ = round(summ/shet,1)
-        self.ui.label_kpi_otd.setText(str(summ))
-
-
+            shet += 1
+        summ = round(summ / shet, 1)
+        ima_otd = vnsh.ima_otd(self)
+        summ_vn = 0
+        schet_vn = 0
+        sr_vn = 100
+        if F.nalich_file(F.scfg(
+                'strukt') + F.sep() + self.ui.l_period.text() + '$vn.pickle'):
+            spis_vn = F.otkr_f(F.scfg(
+                'strukt') + F.sep() + self.ui.l_period.text() + '$vn.pickle', False, "", True)
+            for x in range(len(spis_vn)):
+                for y in spis_vn[x]:
+                    for z in spis_vn[x][y]:
+                        if z == ima_otd:
+                            summ_vn += int(spis_vn[x][y][z][0])
+                            schet_vn +=1
+            sr_vn = summ_vn/schet_vn
+        self.ui.l_kpi_otd.setText(f'{str(round((summ*2+sr_vn)/3))} (КПЭ сумм. сотр.:{str(summ)}, '
+                                  f'сумм. КПЭ окр.:{str(summ_vn)}, Nотд-1:{str(schet_vn)})')
 
 
 app = QtWidgets.QApplication([])

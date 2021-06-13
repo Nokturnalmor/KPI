@@ -41,7 +41,7 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QComboBox" name="comboBox_empl">
+          <widget class="QComboBox" name="cmb_empl">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -73,7 +73,7 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QPushButton" name="pushButton_login">
+            <widget class="QPushButton" name="btn_login">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -103,7 +103,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_parol">
+            <widget class="QLineEdit" name="le_parol">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -154,7 +154,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_3_nParol">
+            <widget class="QLineEdit" name="le_3_nParol">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -205,7 +205,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_3_nParol_2">
+            <widget class="QLineEdit" name="le_3_nParol_2">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -256,7 +256,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_logout">
+            <widget class="QPushButton" name="btn_logout">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -293,7 +293,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_period">
+     <widget class="QLabel" name="l_period">
       <property name="font">
        <font>
         <pointsize>18</pointsize>
@@ -329,7 +329,7 @@
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
-         <widget class="QLabel" name="label_img">
+         <widget class="QLabel" name="l_img">
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
           </property>
@@ -352,7 +352,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <widget class="QCalendarWidget" name="calendarWidget">
+         <widget class="QCalendarWidget" name="clnd">
           <property name="font">
            <font>
             <pointsize>16</pointsize>
@@ -395,14 +395,14 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_2">
                <item>
-                <widget class="QLabel" name="label">
+                <widget class="QLabel" name="l">
                  <property name="text">
                   <string>КПЭотд.:</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QLabel" name="label_kpi_otd">
+                <widget class="QLabel" name="l_kpi_otd">
                  <property name="text">
                   <string>КПЭотд.</string>
                  </property>
@@ -413,14 +413,14 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <widget class="QLabel" name="label_3">
+                <widget class="QLabel" name="l_3">
                  <property name="text">
                   <string>КПЭпроизводство:</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QLabel" name="label_kpi_pr">
+                <widget class="QLabel" name="l_kpi_pr">
                  <property name="text">
                   <string>КПЭотд.</string>
                  </property>
@@ -441,7 +441,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_10">
         <item>
-         <widget class="QComboBox" name="comboBox_rabotn">
+         <widget class="QComboBox" name="cmb_rabotn">
           <property name="font">
            <font>
             <pointsize>16</pointsize>
@@ -450,7 +450,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTableWidget" name="tableWidget_kpi_sotr">
+         <widget class="QTableWidget" name="tbl_kpi_sotr">
           <property name="font">
            <font>
             <pointsize>14</pointsize>
@@ -461,7 +461,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
-           <widget class="QPushButton" name="pushButton_save_sotr">
+           <widget class="QPushButton" name="btn_save_sotr">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -494,7 +494,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_rasschet">
+           <widget class="QPushButton" name="btn_rasschet">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -534,7 +534,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_raschet">
+           <widget class="QLabel" name="l_raschet">
             <property name="minimumSize">
              <size>
               <width>121</width>
@@ -564,7 +564,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_del_kpi_sotr">
+           <widget class="QPushButton" name="btn_del_kpi_sotr">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -606,7 +606,28 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_7">
         <item>
-         <widget class="QTableWidget" name="tableWidget_kpi_vnesh">
+         <widget class="QLabel" name="l_tek_otd">
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+           </font>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Panel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="text">
+           <string>Отдел</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="tbl_kpi_vnesh">
           <property name="font">
            <font>
             <pointsize>14</pointsize>
@@ -617,7 +638,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
-           <widget class="QPushButton" name="pushButton_save_vn">
+           <widget class="QPushButton" name="btn_save_vn">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -653,7 +674,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_load_vn">
+           <widget class="QPushButton" name="btn_load_vn">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -698,7 +719,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
-         <widget class="QComboBox" name="comboBox_dolgn_red">
+         <widget class="QComboBox" name="cmb_dolgn_red">
           <property name="font">
            <font>
             <pointsize>16</pointsize>
@@ -707,7 +728,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTableWidget" name="tableWidget_red_kpi">
+         <widget class="QTableWidget" name="tbl_red_kpi">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -724,7 +745,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_8">
           <item>
-           <widget class="QPushButton" name="pushButton_save_red_kpi">
+           <widget class="QPushButton" name="btn_save_red_kpi">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -757,7 +778,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_del_red_kpi">
+           <widget class="QPushButton" name="btn_del_red_kpi">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -796,7 +817,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_line_up">
+           <widget class="QPushButton" name="btn_line_up">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -836,7 +857,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_dell_line">
+           <widget class="QPushButton" name="btn_dell_line">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -890,7 +911,7 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_9">
            <item>
-            <widget class="QTableWidget" name="tableWidget_struktura">
+            <widget class="QTableWidget" name="tbl_struktura">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -914,7 +935,7 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_11">
            <item>
-            <widget class="QTableWidget" name="tableWidget_filtr">
+            <widget class="QTableWidget" name="tbl_filtr">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -932,7 +953,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_save_struktura">
+         <widget class="QPushButton" name="btn_save_struktura">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>

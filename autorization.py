@@ -27,6 +27,7 @@ def log_in(self):
         self.setWindowTitle(self.ui.cmb_empl.currentText())
         self.ui.le_parol.setText('')
         self.spis_dolg_filtr = []
+        self.ui.tabWidget.setCurrentIndex(0)
         # load_all(self)
 
 
@@ -66,6 +67,8 @@ def load_combo_sotr(self, ind=0):
 
 
 def save_strukt(self):
+    if self.windowTitle() == "Расчет КПЭ":
+        return
     if self.ui.tbl_struktura.item(0, 0).text() == "":
         self.showdialog('Не введен отдел')
         return
@@ -304,3 +307,4 @@ def unload(self):
     self.ui.tbl_kpi_vnesh.clear()
     self.ui.l_kpi_otd.clear()
     self.ui.l_kpi_pr.clear()
+    self.ui.tbl_filtr.clear()

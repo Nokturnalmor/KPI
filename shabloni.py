@@ -180,6 +180,8 @@ def proverka_stroki_zap(self, i):
 
 
 def save_red_kpi(self):
+    if self.windowTitle() == "Расчет КПЭ":
+        return
     rez = proverka_red_kpi(self)
     if not rez:
         return
@@ -194,6 +196,8 @@ def save_red_kpi(self):
 
 
 def del_red_kpi(self):
+    if self.windowTitle() == "Расчет КПЭ":
+        return
     rez = self.showdialogYN(f'Будет сброшен шаблон для {self.ui.cmb_dolgn_red.currentText()}')
     if rez == 1024:  # no 4194304
         F.udal_file(F.scfg(

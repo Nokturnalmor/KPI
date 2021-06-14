@@ -1,6 +1,8 @@
 import Cust_Functions as F
 import autorization as aut
-
+#import comtypes.client
+from docxtpl import DocxTemplate
+import os
 
 def set_rabotn(self):
     if self.windowTitle() == "Расчет КПЭ":
@@ -65,6 +67,8 @@ def zapolit_tabl_kpi(self, spis):
 
 
 def save_sotr(self):
+    if self.windowTitle() == "Расчет КПЭ":
+        return
     if not proverka_dannih(self):
         return
     spis = F.spisok_iz_wtabl(self.ui.tbl_kpi_sotr, '', True)
@@ -127,6 +131,8 @@ def proverka_dannih(self, spis=()):
 
 
 def rasschet_sotr(self):
+    if self.windowTitle() == "Расчет КПЭ":
+        return
     if not proverka_dannih(self):
         return
     spis = proverka_dannih(self)
@@ -156,7 +162,7 @@ def rasschet_sotr(self):
                 spis[i][kol_podit] = '0'
     if flag_otsek:
         summ = 0
-    self.ui.l_raschet.setText(f"Итог:{str(round(summ, 1))}")
+    self.ui.l_raschet.setText(f"Итого: {str(round(summ, 1))}")
     zapolit_tabl_kpi(self, spis)
 
 
@@ -186,6 +192,8 @@ def rassch_nepr(spis, i, kol_fact, kol_z1, kol_z2, kol_z3):
 
 # no 4194304
 def del_kpi_sotr(self):
+    if self.windowTitle() == "Расчет КПЭ":
+        return
     rez = self.showdialogYN(f'Будет удален КПЭ для {self.ui.cmb_rabotn.currentText()} на {self.ui.l_period.text()}')
     if rez == 1024:
         name = self.ui.l_period.text()
@@ -197,3 +205,65 @@ def del_kpi_sotr(self):
                         f'его не вернуть.\n'
                         f'никак.')
         aut.load_combo_sotr(self, self.ui.cmb_rabotn.currentIndex())
+
+def export(self):
+    if F.nalich_file(os.path.join("icons", "шаблон.docx")) == False:
+        self.showdialog("шаблон не найден")
+        return
+    if self.ui.l_raschet.text() == "":
+        rasschet_sotr(self)
+    msg = ""
+    sch= 0
+    spis = F.spisok_iz_wtabl(self.ui.tbl_kpi_sotr, '', True)
+    kol_cel = F.nom_kol_po_im_v_shap(spis,"Цель")
+    kol_naim = F.nom_kol_po_im_v_shap(spis, "Наименование КПЭ")
+    kol_ed = F.nom_kol_po_im_v_shap(spis, "Ед. изм.")
+    kol_fact = F.nom_kol_po_im_v_shap(spis, 'Факт. вып.')
+    i = 0
+    msg += f'{vpisat("№",3)}|{vpisat(spis[i][kol_cel],25)}|{vpisat(spis[i][kol_naim],45)}|{vpisat(spis[i][kol_ed],15)}|{vpisat(spis[i][kol_fact],10)}\n'
+    msg += f'{vpisat("-", 3,znac= "-")}|{vpisat("-", 25,znac= "-")}|' \
+           f'{vpisat("-", 45,znac= "-")}|{vpisat("-", 15,znac= "-")}|' \
+           f'{vpisat("-", 10,znac= "-")}\n'
+
+    for i in range(2, len(spis)):
+        sch +=1
+        msg += f'{vpisat(str(sch)+".",3)}|{vpisat(spis[i][kol_cel],25)}|{vpisat(spis[i][kol_naim],45)}|{vpisat(spis[i][kol_ed],15)}|{vpisat(spis[i][kol_fact],10)}\n'
+
+    doc = DocxTemplate(os.path.join("icons", "шаблон.docx"))
+    context = {'emploe': self.ui.cmb_rabotn.currentText(), 'period': self.ui.l_period.text(), 'kpi': msg,
+               'itog': self.ui.l_raschet.text(), 'now': F.now()}
+
+
+    doc.render(context)
+    if F.nalich_file(F.put_po_umolch() + os.sep + 'КПЭ' + os.sep) == False:
+        F.sozd_dir(F.put_po_umolch() + os.sep + 'КПЭ' + os.sep)
+    putf = f'{F.put_po_umolch()}{os.sep}КПЭ{os.sep}{self.fio(self.ui.cmb_rabotn.currentText())}${self.ui.l_period.text()}.docx'
+    doc.save(putf)
+    F.zapyst_file(putf)
+    return
+    #wdFormatPDF = 17
+    #
+    #in_file = os.path.abspath("final.docx")
+    #out_file = os.path.abspath("final.pdf")
+    #
+    #word = comtypes.client.CreateObject('Word.Application')
+    #doc = word.Documents.Open(in_file)
+    #doc.SaveAs(out_file, FileFormat=wdFormatPDF)
+    #doc.Close()
+    #word.Quit()
+
+def vpisat(text,dl,orient=0,znac = " "):
+    text = str(text)
+    text = text.strip().replace('\n','')
+    text = text[:dl]
+
+    if orient == 1:
+        if (dl - len(text))%2 > 0:
+            itog = f'{znac*(((dl - len(text))//2)+1)}{text}{znac*((dl - len(text))//2)}'
+        else:
+            itog = f'{znac * (((dl - len(text)) / 2) + 1)}{text}{znac * ((dl - len(text)) / 2)}'
+    if orient == 0:
+        itog = f'{text}{znac * (dl - len(text))}'
+    if orient == 2:
+        itog = f'{znac * (dl - len(text))}{text}'
+    return itog

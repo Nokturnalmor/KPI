@@ -1,16 +1,16 @@
 import Cust_Functions as F
 from PyQt5 import QtCore
 
-def ima_otd(self):
-    spis = F.otkr_f(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + 'strukt.pickle', "", "", True)
-    if spis[1][1] == self.windowTitle():
+def ima_otd(self,fio_ruc):
+    spis = F.otkr_f(F.scfg('strukt') + F.sep() + fio_ruc + F.sep() + 'strukt.pickle', "", "", True)
+    if spis[1][1] == fio_ruc:
         return spis[1][0]
     return
 
 def zapoln_vnsh_tabl(self):
     if self.windowTitle() == "Расчет КПЭ":
         return
-    self.ui.l_tek_otd.setText(ima_otd(self))
+    self.ui.l_tek_otd.setText(ima_otd(self,self.windowTitle()))
     name = self.ui.l_period.text() + "$" + self.ui.l_tek_otd.text()
     if F.nalich_file(F.scfg(
             'strukt') + F.sep() + self.windowTitle() + F.sep() + self.ui.l_period.text() + F.sep() + name + "$" +
@@ -74,14 +74,17 @@ def zapoln_vnsh_tabl(self):
 
 
 
-def spispok_otdelov(self):
+def spispok_otdelov(self, ruc = False):
     spis_pap = F.spis_files(F.scfg('strukt') + F.sep())[0][1]
     spis_otdelov = []
     tek_otd = ""
     for i in spis_pap:
         if F.nalich_file(F.scfg('strukt') + F.sep() + i + F.sep() + 'strukt.pickle'):
             spis = F.otkr_f(F.scfg('strukt') + F.sep() + i + F.sep() + 'strukt.pickle', "", "", True)
-            spis_otdelov.append(spis[1][0])
+            if ruc == True:
+                spis_otdelov.append(spis[1][1])
+            else:
+                spis_otdelov.append(spis[1][0])
     return spis_otdelov
 
 
@@ -94,6 +97,8 @@ def proverka_dannih(self):
 
 
 def save_vn(self):
+    if self.windowTitle() == "Расчет КПЭ":
+        return
     if not proverka_dannih(self):
         return
     spis = F.spisok_iz_wtabl(self.ui.tbl_kpi_vnesh, '', True)

@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QApplication, QStyle
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWinExtras import QtWin
 import os
+from docxtpl import DocxTemplate
 
 from mydesign import Ui_MainWindow  # импорт нашего сгенерированного файла
 import sys
@@ -43,6 +44,8 @@ class Mywindow(QtWidgets.QMainWindow):
         self.ui.btn_del_kpi_sotr.clicked.connect(lambda: kps.del_kpi_sotr(self))
         self.ui.btn_save_vn.clicked.connect(lambda: vnsh.save_vn(self))
         self.ui.tbl_kpi_vnesh.cellChanged.connect(lambda: vnsh.podschet(self))
+        self.ui.btn_export.clicked.connect(lambda: kps.export(self))
+        self.ui.btn_export_pr.clicked.connect(self.export_pr)
 
     def showdialog(self, msg):
         msg_box = QtWidgets.QMessageBox()
@@ -119,6 +122,9 @@ class Mywindow(QtWidgets.QMainWindow):
         self.ui.btn_save_sotr.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton)))
         self.ui.btn_rasschet.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_FileDialogDetailedView)))
         self.ui.btn_del_kpi_sotr.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogDiscardButton)))
+        self.ui.btn_export.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DriveHDIcon)))
+        self.ui.btn_export_pr.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DriveHDIcon)))
+        self.ui.btn_utverg.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_BrowserReload)))#QStyle.SP_VistaShield
 
     def keyReleaseEvent(self, e):
         # print(str(int(e.modifiers())) + ' ' +  str(e.key()))
@@ -169,44 +175,90 @@ class Mywindow(QtWidgets.QMainWindow):
     def tab_click2(self):
         aut.load_combo_sotr(self)
 
-    def tab_click1(self):
-        self.ui.l_kpi_otd.setText(str(0))
-        if self.windowTitle() == 'Расчет КПЭ':
-            return
+    def msg_export(self):
+        spis_otd = vnsh.spispok_otdelov(self, True)
+        spis_otd_n = vnsh.spispok_otdelov(self)
         period = self.ui.l_period.text()
-        if F.nalich_file(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + period + F.sep()) == False:
+        kpi_otd_summ = 0
+        sch = 0
+        otsp = "  "
+        msg = ''
+        itog= ''
+        for i in range(len(spis_otd)):
+            fio_ruc = spis_otd[i]
+            msg +=(f'Подразделение {spis_otd_n[i]}, руководитель {fio_ruc}:'+ '\n')
+            spis_files = F.spis_files(F.scfg('strukt') + F.sep() + fio_ruc + F.sep() + period + F.sep())[0][2]
+            msg +=(otsp + 'Сотрудники:'+ '\n')
+            for sotr in spis_files:
+                if "$vn" in sotr:
+                    continue
+                ima_sotr = sotr.split('$')[1]
+                ima_sotr = otsp * 2 + ima_sotr.replace('.pickle', '')
+                msg +=(ima_sotr + ' ' + str(self.rasch_kpi_sotr(fio_ruc, period, sotr)) + '%'+ '\n')
+            spis_vn = self.rasch_kpi_otd_vn(spis_otd_n[i], True)
+            for j in range(len(spis_vn)):
+                msg +=(f'{otsp}Оценен подразделением {spis_vn[j][0]} на {spis_vn[j][1]}%:'+ '\n')
+                for key in spis_vn[j][2].keys():
+                    msg +=(f'{otsp * 2 + key}: {", ".join(spis_vn[j][2][key])}'+ '\n')
+
+            spis_d_po_otdely = self.rasch_kpi_otdela(fio_ruc)
+            summ = spis_d_po_otdely[0]
+            sr_vn = spis_d_po_otdely[3]
+            kpi_otd_num = round((summ * 2 + sr_vn) / 3)
+            msg +=("КПЭ отдела: " + str(kpi_otd_num) + "%"+ '\n')
+            msg +=( '\n')
+            msg +=( '\n')
+            kpi_otd_summ += kpi_otd_num
+            sch += 1
+        itog +=("КПЭ производства: " + str(round(kpi_otd_summ / sch)) + "%")
+        return [msg, itog]
+
+    def export_pr(self):
+        if F.nalich_file(os.path.join("icons", "Шаблон_п.docx")) == False:
+            self.showdialog("шаблон не найден")
             return
-        spis_files = F.spis_files(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + period + F.sep())[0]
+        s_msg = self.msg_export()
+        msg = s_msg[0]
+        itog = s_msg[1]
+
+        doc = DocxTemplate(os.path.join("icons", "Шаблон_п.docx"))
+        context = {'period': self.ui.l_period.text(), 'msg': msg,
+                   'itog': itog, 'now': F.now()}
+
+        doc.render(context)
+        if F.nalich_file(F.put_po_umolch() + os.sep + 'КПЭ' + os.sep) == False:
+            F.sozd_dir(F.put_po_umolch() + os.sep + 'КПЭ' + os.sep)
+        putf = f'{F.put_po_umolch()}{os.sep}КПЭ{os.sep}Производство${self.ui.l_period.text()}.docx'
+        doc.save(putf)
+        F.zapyst_file(putf)
+        return
+
+
+    def rasch_kpi_sotr(self,fio_ruc,period,ima_faila):
+        spis = F.otkr_f(F.scfg(
+            'strukt') + F.sep() + fio_ruc + F.sep() + period + F.sep() + ima_faila)
         summ = 0
-        shet = 0
-        for i in spis_files[2]:
-            if "$vn" in i:
-                continue
-            spis = F.otkr_f(F.scfg(
-                'strukt') + F.sep() + self.windowTitle() + F.sep() + period + F.sep() + i)
+        if kps.proverka_dannih(self, spis) == False:
+            return summ
+        kol_fact = F.nom_kol_po_im_v_shap(spis, 'Факт. вып.')
+        kol_tip = F.nom_kol_po_im_v_shap(spis, "Тип КПЭ")
+        kol_z1 = F.nom_kol_po_im_v_shap(spis, "Уров.вып.№1")
+        kol_z2 = F.nom_kol_po_im_v_shap(spis, "Уров.вып.№2")
+        kol_z3 = F.nom_kol_po_im_v_shap(spis, "Уров.вып.№3")
+        kol_ves = F.nom_kol_po_im_v_shap(spis, "Вес КПЭ")
+        for i in range(2, len(spis)):
+            if spis[i][kol_tip] == self.KPITIPS[0]:
+                summ += kps.rassch_nepr(spis, i, kol_fact, kol_z1, kol_z2, kol_z3) * int(spis[i][kol_ves]) / 100
+            if spis[i][kol_tip] == self.KPITIPS[1]:
+                summ -= int(spis[i][kol_fact]) * int(spis[i][kol_ves])
+            if spis[i][kol_tip] == self.KPITIPS[2]:
+                summ -= summ * int(spis[i][kol_fact])
+        return round(summ,1)
 
-            if kps.proverka_dannih(self, spis) == False:
-                continue
-
-            kol_fact = F.nom_kol_po_im_v_shap(spis, 'Факт. вып.')
-            kol_tip = F.nom_kol_po_im_v_shap(spis, "Тип КПЭ")
-            kol_z1 = F.nom_kol_po_im_v_shap(spis, "Уров.вып.№1")
-            kol_z2 = F.nom_kol_po_im_v_shap(spis, "Уров.вып.№2")
-            kol_z3 = F.nom_kol_po_im_v_shap(spis, "Уров.вып.№3")
-            kol_ves = F.nom_kol_po_im_v_shap(spis, "Вес КПЭ")
-            for i in range(2, len(spis)):
-                if spis[i][kol_tip] == self.KPITIPS[0]:
-                    summ += kps.rassch_nepr(spis, i, kol_fact, kol_z1, kol_z2, kol_z3) * int(spis[i][kol_ves]) / 100
-                if spis[i][kol_tip] == self.KPITIPS[1]:
-                    summ -= int(spis[i][kol_fact]) * int(spis[i][kol_ves])
-                if spis[i][kol_tip] == self.KPITIPS[2]:
-                    summ -= summ * int(spis[i][kol_fact])
-            shet += 1
-        summ = round(summ / shet, 1)
-        ima_otd = vnsh.ima_otd(self)
+    def rasch_kpi_otd_vn(self,ima_otd,export=False):
         summ_vn = 0
         schet_vn = 0
-        sr_vn = 100
+        spis_t = []
         if F.nalich_file(F.scfg(
                 'strukt') + F.sep() + self.ui.l_period.text() + '$vn.pickle'):
             spis_vn = F.otkr_f(F.scfg(
@@ -216,11 +268,63 @@ class Mywindow(QtWidgets.QMainWindow):
                     for z in spis_vn[x][y]:
                         if z == ima_otd:
                             summ_vn += int(spis_vn[x][y][z][0])
-                            schet_vn +=1
-            sr_vn = summ_vn/schet_vn
-        self.ui.l_kpi_otd.setText(f'{str(round((summ*2+sr_vn)/3))} (КПЭ сумм. сотр.:{str(summ)}, '
-                                  f'сумм. КПЭ окр.:{str(summ_vn)}, Nотд-1:{str(schet_vn)})')
+                            schet_vn += 1
+                            if export== True:
+                                spis_t.append([y,int(spis_vn[x][y][z][0]),{'Замечания': spis_vn[x][y][z][1],'Поощрения': spis_vn[x][y][z][2]}])
+        if export:
+            return spis_t
+        else:
+            return [summ_vn,schet_vn]
 
+    def rasch_kpi_otdela(self, fio_ruc:str):
+        period = self.ui.l_period.text()
+        if F.nalich_file(F.scfg('strukt') + F.sep() + fio_ruc + F.sep() + period + F.sep()) == False:
+            return
+        spis_files = F.spis_files(F.scfg('strukt') + F.sep() + fio_ruc + F.sep() + period + F.sep())[0]
+        summ = 0
+        shet = 0
+        for i in spis_files[2]:
+            if "$vn" in i:
+                continue
+            summ_sotr = self.rasch_kpi_sotr(fio_ruc,period,i)
+            summ += summ_sotr
+            shet += 1
+        summ = round(summ / shet, 1)
+        ima_otd = vnsh.ima_otd(self,fio_ruc)
+        sr_vn = 100
+        vn = self.rasch_kpi_otd_vn(ima_otd)
+        sr_vn = vn[0] / vn[1]
+        return [summ,vn[0],vn[1],sr_vn]
+
+    def tab_click1(self):
+        self.ui.l_kpi_otd.setText(str(0))
+        if self.windowTitle() == 'Расчет КПЭ':
+            return
+        spis_summ = self.rasch_kpi_otdela(self.windowTitle())
+        summ = spis_summ[0]
+        sr_vn = spis_summ[3]
+        summ_vn = spis_summ[1]
+        schet_vn = spis_summ[2]
+        self.ui.l_kpi_otd.setText(f'{str(round((summ * 2 + sr_vn) / 3))} (сумм.КПЭсотр./Nсотр.:{str(summ)}, '
+                                  f'сумм. КПЭ окр.:{str(summ_vn)}, Nотд-1:{str(schet_vn)})')
+        kpi_proizv_t = ''
+        kpi_proizv = 0
+        schet = 0
+        spis_otd = vnsh.spispok_otdelov(self,True)
+        for i in spis_otd:
+            summ_tmp = self.rasch_kpi_otdela(i)
+            #print(summ_tmp)
+            if summ_tmp == None:
+                continue
+            kpi_proizv += round(((summ_tmp[0] * 2 + summ_tmp[3]) / 3))
+            kpi_proizv_t += str(round(((summ_tmp[0] * 2 + summ_tmp[3]) / 3))) + '  '
+            schet+=1
+        kpi_proizv = round(kpi_proizv/schet,1)
+        self.ui.l_kpi_pr.setText(str(kpi_proizv) + "(" + kpi_proizv_t + ")")
+
+
+    def fio(self, strok:str):
+        return " ".join(strok.split(' ')[:3])
 
 app = QtWidgets.QApplication([])
 

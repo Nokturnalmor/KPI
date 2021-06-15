@@ -11,6 +11,8 @@ def log_in(self):
     if self.ui.le_parol.text() == "":
         return
     if admin(self):
+        self.showdialog(f'Права администратора')
+        self.ui.tabWidget.setTabVisible(6, True)
         flag_log_in = True
     if not flag_log_in:
         rez_challenge = True  # check_pass(self.ui.cmb_empl.currentText(), self.ui.le_parol.text())
@@ -20,7 +22,7 @@ def log_in(self):
             self.ui.le_parol.setText('')
             return
         elif rez_challenge is None:
-            F.msgbox('Не зарегистрирован')
+            self.showdialog('Не зарегистрирован')
             return
         flag_log_in = True
     if flag_log_in:
@@ -29,6 +31,50 @@ def log_in(self):
         self.spis_dolg_filtr = []
         self.ui.tabWidget.setCurrentIndex(0)
         # load_all(self)
+
+def load_config(self,spis = ""):
+    if spis == "":
+        if F.nalich_file(F.scfg('strukt') + F.sep() + 'conf.pickle'):
+            spis = F.otkr_f(F.scfg('strukt') + F.sep() + 'conf.pickle',False,"",True)
+        else:
+            spis = [['ФИО','Утверждение','Выгрузка']]
+        spis.append(['','',''])
+
+    F.zapoln_wtabl(self,spis,self.ui.tbl_prava,0,{1,2,3},(),{},200,True,"")
+    for i in range(self.ui.tbl_prava.rowCount()):
+        combo = QtWidgets.QComboBox()
+        combo.addItem("")
+        for item in self.spis_str_emploee:
+            combo.addItem(item)
+            if self.ui.tbl_prava.item(i, 0).text() == item:
+                combo.setCurrentText(item)
+        combo.currentIndexChanged.connect((lambda: onstatecdhanged_config(self)))
+        self.ui.tbl_prava.setCellWidget(i, 0, combo)
+
+def onstatecdhanged_config(self):
+    ch = self.sender()
+    ix = self.ui.tbl_prava.indexAt(ch.pos())
+    print(ix.row(), ix.column(), ch.currentText())
+    self.ui.tbl_prava.item(ix.row(), ix.column()).setText(ch.currentText())
+    if self.ui.tbl_prava.rowCount() - 1 == ix.row() and ch.currentText() != '':
+        spis = F.spisok_iz_wtabl(self.ui.tbl_prava, '', True)
+        spis.append(["",'',''])
+        load_config(self, spis)
+
+def save_prava(self):
+    spis = F.spisok_iz_wtabl(self.ui.tbl_prava, '', True)
+    spis_tmp = [spis[0]]
+    for i in range(1,len(spis)):
+        flag_pust = True
+        for j in spis[i]:
+            if j != "":
+                flag_pust = False
+                break
+        if flag_pust == False:
+            spis_tmp.append(spis[i])
+    F.zap_f(F.scfg('strukt') + F.sep() + 'conf.pickle',spis_tmp,'',True)
+    load_config(self, spis_tmp)
+    self.showdialog('Успешно сохранено')
 
 
 def load_all(self):
@@ -279,7 +325,7 @@ def log_out(self):
 
 
 def admin(self):
-    if self.ui.le_parol.text() == "Hyilolo74587458" and 'Беляков Антон' in self.ui.cmb_empl.currentText():
+    if self.ui.le_parol.text() == "Zflvby": #and 'Беляков Антон' in self.ui.cmb_empl.currentText():
         return True
     return False
 
@@ -308,3 +354,4 @@ def unload(self):
     self.ui.l_kpi_otd.clear()
     self.ui.l_kpi_pr.clear()
     self.ui.tbl_filtr.clear()
+    self.ui.tabWidget.setTabVisible(6, False)

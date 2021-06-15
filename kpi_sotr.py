@@ -207,11 +207,12 @@ def del_kpi_sotr(self):
         aut.load_combo_sotr(self, self.ui.cmb_rabotn.currentIndex())
 
 def export(self):
+    if self.windowTitle() == "Расчет КПЭ":
+        return
     if F.nalich_file(os.path.join("icons", "шаблон.docx")) == False:
         self.showdialog("шаблон не найден")
         return
-    if self.ui.l_raschet.text() == "":
-        rasschet_sotr(self)
+    rasschet_sotr(self)
     msg = ""
     sch= 0
     spis = F.spisok_iz_wtabl(self.ui.tbl_kpi_sotr, '', True)
@@ -220,14 +221,14 @@ def export(self):
     kol_ed = F.nom_kol_po_im_v_shap(spis, "Ед. изм.")
     kol_fact = F.nom_kol_po_im_v_shap(spis, 'Факт. вып.')
     i = 0
-    msg += f'{vpisat("№",3)}|{vpisat(spis[i][kol_cel],25)}|{vpisat(spis[i][kol_naim],45)}|{vpisat(spis[i][kol_ed],15)}|{vpisat(spis[i][kol_fact],10)}\n'
-    msg += f'{vpisat("-", 3,znac= "-")}|{vpisat("-", 25,znac= "-")}|' \
-           f'{vpisat("-", 45,znac= "-")}|{vpisat("-", 15,znac= "-")}|' \
+    msg += f'{vpisat("№",2)}|{vpisat(spis[i][kol_cel],22)}|{vpisat(spis[i][kol_naim],60)}|{vpisat(spis[i][kol_ed],10)}|{vpisat(spis[i][kol_fact],10)}\n'
+    msg += f'{vpisat("-", 2,znac= "-")}|{vpisat("-", 22,znac= "-")}|' \
+           f'{vpisat("-", 60,znac= "-")}|{vpisat("-", 10,znac= "-")}|' \
            f'{vpisat("-", 10,znac= "-")}\n'
 
     for i in range(2, len(spis)):
         sch +=1
-        msg += f'{vpisat(str(sch)+".",3)}|{vpisat(spis[i][kol_cel],25)}|{vpisat(spis[i][kol_naim],45)}|{vpisat(spis[i][kol_ed],15)}|{vpisat(spis[i][kol_fact],10)}\n'
+        msg += f'{vpisat(str(sch),2)}|{vpisat(spis[i][kol_cel],22)}|{vpisat(spis[i][kol_naim],60)}|{vpisat(spis[i][kol_ed],10)}|{vpisat(spis[i][kol_fact],10)}\n'
 
     doc = DocxTemplate(os.path.join("icons", "шаблон.docx"))
     context = {'emploe': self.ui.cmb_rabotn.currentText(), 'period': self.ui.l_period.text(), 'kpi': msg,

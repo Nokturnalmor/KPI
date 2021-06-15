@@ -173,10 +173,7 @@ def proverka_stroki_zap(self, i):
                 f'{self.shapka_shablonkpi[0][3]},{self.shapka_shablonkpi[0][5]} ')
             F.migat(self, self.ui.tbl_red_kpi, i, 4, 2)
             return False
-    if flag_vse:
-        return True
-    else:
-        return
+    return True
 
 
 def save_red_kpi(self):

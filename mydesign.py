@@ -15,6 +15,251 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1265, 898)
+        MainWindow.setStyleSheet("QMainWindow {\n"
+"background-color: rgb(43, 48, 51);\n"
+"color: rgb(230, 230, 230);\n"
+"}\n"
+"\n"
+"\n"
+"QMenuBar {\n"
+"    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,\n"
+"                                      stop:0 lightgray, stop:1 darkgray);\n"
+"    spacing: 3px; /* spacing between menu bar items */\n"
+"}\n"
+"\n"
+"QMenuBar::item {\n"
+"    padding: 1px 4px;\n"
+"    background:  transparent;\n"
+"    border-radius: 4px;\n"
+"}\n"
+"\n"
+"QMenuBar::item:selected { /* when selected using mouse or keyboard */\n"
+"    background: #a8a8a8;\n"
+"}\n"
+"\n"
+"QMenuBar::item:pressed {\n"
+"    background: #888888;\n"
+"}\n"
+"\n"
+"QMenu {\n"
+"    background-color: #ABABAB; /* sets background of the menu */\n"
+"    border: 1px solid black;\n"
+"}\n"
+"\n"
+"QMenu::item {\n"
+"    /* sets background of menu item. set this to something non-transparent\n"
+"        if you want menu color and menu item color to be different */\n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+"QMenu::item:selected { /* when user selects item using mouse or keyboard */\n"
+"    background-color:  rgb(247, 175, 42);\n"
+"}\n"
+"\n"
+"\n"
+"  /*Tool button styles */\n"
+"QCalendarWidget QToolButton { \n"
+"height:30px;\n"
+"width:250px;\n"
+"color: rgb(230, 230, 230);\n"
+"font-size:26px;\n"
+"icon-size:56px,56px;\n"
+"background-color:rgba(211, 49, 22,244);\n"
+"selection-color: rgb(230, 230, 230);\n"
+"selection-background-color:rgba(247, 175, 42,122);\n"
+"}\n"
+" \n"
+"  /* header row */\n"
+"QCalendarWidget  QWidget{\n"
+"alternate-background-color:rgb(43, 48, 51);\n"
+"selection-color: rgb(230, 230, 230);\n"
+"selection-background-color:rgba(211, 49, 22,244);\n"
+"}\n"
+"  \n"
+"  /*normal days */\n"
+"QCalendarWidget QAbstractItemView:enabled {\n"
+"font-size:22px;\n"
+"color: rgb(230, 230, 230);\n"
+"background-color:rgb(143, 148, 151);\n"
+"selection-background-color:rgba(247, 175, 42,122);\n"
+"selection-color: rgb(230, 230, 230);\n"
+"}\n"
+"\n"
+"QTableWidget {\n"
+"    selection-background-color:  rgba(247, 175, 42,122);\n"
+"    background-color:  rgb(173, 178, 181);\n"
+"}\n"
+"\n"
+"QHeaderView {\n"
+"    background-color:  rgb(143, 148, 151);\n"
+"    font-size:13px;\n"
+"}\n"
+"\n"
+"QTableView::indicator:unchecked {\n"
+"    background-color: #d7d6d5\n"
+"}\n"
+"\n"
+"QTableView QTableCornerButton::section {\n"
+" color:  rgb(230, 230, 230);\n"
+"    border-style: solid;\n"
+"     background-color: qlineargradient( x1: 0, y1: 0, x2: 1, y2: 1,\n"
+"                                        stop: 0 rgb(89, 89, 89), stop: 1 rgb(33, 38, 41));\n"
+"}\n"
+"\n"
+"QHeaderView::section{\n"
+"    color:  rgb(230, 230, 230);\n"
+"    border-style: solid;\n"
+"     background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                        stop: 0 rgb(89, 89, 89), stop: 1 rgb(33, 38, 41));\n"
+" }\n"
+"\n"
+"QTabWidget::pane { /* The tab widget frame */\n"
+"    border-top: 2px solid rgba(195, 52, 69, 152);\n"
+"}\n"
+"\n"
+"QTabWidget::tab-bar {\n"
+"    left: 5px; /* move to the right by 5px */\n"
+"}\n"
+"\n"
+"/* Style the tab using the tab sub-control. Note that\n"
+"    it reads QTabBar _not_ QTabWidget */\n"
+"QTabBar::tab {\n"
+"    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                stop: 0  rgb(99, 99, 99), stop: 0.4  rgb(49, 49, 49),\n"
+"                                stop: 0.5  rgb(49, 49, 49), stop: 1.0  rgb(99, 99, 99));\n"
+"    border: 1px solid rgb(233, 78, 13);\n"
+"    color: rgb(230, 230, 230);\n"
+"    border-bottom-color: rgba(195, 52, 69, 152); /* same as the pane color */\n"
+"    border-top-left-radius: 5px;\n"
+"    border-top-right-radius: 9px;\n"
+"    min-width: 12ex;\n"
+"    padding: 5px;\n"
+"}\n"
+"\n"
+"\n"
+"\n"
+"QTabBar::tab:selected {\n"
+"    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                stop: 0  rgb(89, 89, 89), stop: 0.4  rgb(39, 39, 39),\n"
+"                                stop: 0.5  rgb(49, 49, 49), stop: 1.0  rgb(99, 99, 99));\n"
+" border-color: rgb(195, 52, 69);\n"
+"    border-bottom-color: rgba(195, 52, 69, 252); /* same as pane color */\n"
+"}\n"
+"\n"
+"QTabBar::tab:!selected {\n"
+"    margin-top: 5px; /* make non-selected tabs look smaller */\n"
+"     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                stop: 0  rgb(129, 129, 129), stop: 0.4  rgb(59, 59, 59),\n"
+"                                stop: 0.5  rgb(59, 59, 59), stop: 1.0  rgb(129,129, 129));\n"
+"}\n"
+"QTabBar::tab:hover {\n"
+"    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                stop: 0  rgb(89, 89, 89), stop: 0.4  rgb(49, 49, 49),\n"
+"                                stop: 0.5  rgb(49, 49, 49), stop: 1.0  rgb(99, 99, 99));\n"
+"}\n"
+"QComboBox {\n"
+"    border: 1px solid  rgba(233, 78, 13,200);\n"
+"    border-radius: 4px;\n"
+"    color: rgb(230, 230, 230);\n"
+"    background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                        stop: 0 rgb(89, 89, 89), stop: 1 rgb(163,158, 161));\n"
+"    padding: 1px 18px 1px 3px;\n"
+"    min-width: 6em;\n"
+"}\n"
+"\n"
+"QComboBox:on { /* shift the text when the popup opens */\n"
+"    padding-top: 3px;\n"
+"    padding-left: 4px;\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;  \n"
+"    width: 19px;\n"
+"    color: rgb(130, 30, 130);\n"
+"    /* border-left-width: 1px;\n"
+"    border-left-color: darkgray;\n"
+"    border-left-style: solid; /* just a single line  */\n"
+"    /*border-top-right-radius: 3px; /* same radius as the QComboBox   */ \n"
+"   /*  border-bottom-right-radius: 3px;*/\n"
+"}\n"
+"\n"
+" /*\n"
+"QComboBox::down-arrow {\n"
+"    image: url(/usr/share/icons/crystalsvg/16x16/actions/1downarrow.png);\n"
+"} */\n"
+"QComboBox::down-arrow:on { /* shift the arrow when popup is open */\n"
+"    top: 1px;\n"
+"    left: 1px;\n"
+"}\n"
+"\n"
+"QComboBox QAbstractItemView {\n"
+"    border: 2px solid darkgray;\n"
+"    color: rgb(21, 21, 21);\n"
+"    background-color: #888888;\n"
+"    selection-background-color: rgba(247, 175, 42,222);\n"
+"}\n"
+"\n"
+"\n"
+"\n"
+"QGroupBox {\n"
+"   /* background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #E0E0E0, stop: 1 #FFFFFF);*/\n"
+"    border: 2px solid rgba(195, 52, 69, 152);\n"
+"    border-radius: 5px;\n"
+"    margin-top: 3ex; /* leave space at the top for the title */\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    subcontrol-origin: margin;\n"
+"    subcontrol-position: top center; /* position at the top center */\n"
+"    padding: 0 3px;\n"
+"    color: rgb(230, 230, 230);\n"
+"    /* background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #FF0ECE, stop: 1 #FFFFFF);*/\n"
+"}\n"
+"\n"
+"QLineEdit {\n"
+"border: 1px solid  rgb(233, 78, 13);\n"
+"border-radius: 12;\n"
+"color: rgb(230, 230, 230);\n"
+"background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                        stop: 0 rgb(69, 69, 69), stop: 1 rgb(163,158, 161));\n"
+"}\n"
+"\n"
+"QLabel {\n"
+"border: 1px solid  rgb(242, 142, 0);\n"
+"border-radius: 5;\n"
+"color: rgb(230, 230, 230);\n"
+"background-color: qlineargradient( x1: 1, y1: 1, x2: 0, y2: 0,\n"
+"                                        stop: 0 rgb(29, 29, 29), stop: 1 rgb(83,78, 81));\n"
+"}\n"
+"\n"
+"QPushButton {\n"
+"    padding:4px;\n"
+"    color: rgb(230, 230, 230);\n"
+"    border-radius: 12px;\n"
+"    border: 1px solid  rgb(233, 78, 13);\n"
+"    background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                        stop: 0 rgb(89, 89, 89), stop: 1 rgb(33, 38, 41));\n"
+" }\n"
+"QPushButton:hover {\n"
+"    padding:4px;\n"
+"    color: rgb(230, 230, 230);\n"
+"    border-radius: 12px;\n"
+"    border: 1px solid  rgb(233, 78, 13);\n"
+"    background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                        stop: 0 rgb(129, 129, 129), stop: 1 rgb(13, 18, 21));\n"
+" }\n"
+"QPushButton:pressed {\n"
+"    padding:4px;\n"
+"    color: rgb(230, 230, 230);\n"
+"    border-radius: 12px;\n"
+"    border: 2px solid  rgb(233, 78, 13);\n"
+"    background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                        stop: 0 rgb(89, 89, 89), stop: 1 rgb(13, 18, 21));\n"
+" }\n"
+"")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -29,6 +274,7 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(12)
         self.groupBox.setFont(font)
+        self.groupBox.setStyleSheet("")
         self.groupBox.setObjectName("groupBox")
         self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.groupBox)
         self.verticalLayout_8.setObjectName("verticalLayout_8")
@@ -40,12 +286,13 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.cmb_empl.sizePolicy().hasHeightForWidth())
         self.cmb_empl.setSizePolicy(sizePolicy)
-        self.cmb_empl.setMinimumSize(QtCore.QSize(0, 44))
+        self.cmb_empl.setMinimumSize(QtCore.QSize(101, 44))
         self.cmb_empl.setMaximumSize(QtCore.QSize(16777215, 44))
         font = QtGui.QFont()
         font.setPointSize(16)
         self.cmb_empl.setFont(font)
-        self.cmb_empl.setAutoFillBackground(True)
+        self.cmb_empl.setAutoFillBackground(False)
+        self.cmb_empl.setStyleSheet("")
         self.cmb_empl.setObjectName("cmb_empl")
         self.verticalLayout.addWidget(self.cmb_empl)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -61,6 +308,7 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.btn_login.setFont(font)
+        self.btn_login.setStyleSheet("")
         self.btn_login.setObjectName("btn_login")
         self.horizontalLayout.addWidget(self.btn_login)
         self.le_parol = QtWidgets.QLineEdit(self.groupBox)
@@ -76,6 +324,8 @@ class Ui_MainWindow(object):
         self.le_parol.setFont(font)
         self.le_parol.setStatusTip("")
         self.le_parol.setWhatsThis("")
+        self.le_parol.setStyleSheet("\n"
+"")
         self.le_parol.setInputMask("")
         self.le_parol.setText("")
         self.le_parol.setMaxLength(22)
@@ -95,6 +345,7 @@ class Ui_MainWindow(object):
         self.le_3_nParol.setFont(font)
         self.le_3_nParol.setStatusTip("")
         self.le_3_nParol.setWhatsThis("")
+        self.le_3_nParol.setStyleSheet("")
         self.le_3_nParol.setInputMask("")
         self.le_3_nParol.setText("")
         self.le_3_nParol.setMaxLength(22)
@@ -114,6 +365,7 @@ class Ui_MainWindow(object):
         self.le_3_nParol_2.setFont(font)
         self.le_3_nParol_2.setStatusTip("")
         self.le_3_nParol_2.setWhatsThis("")
+        self.le_3_nParol_2.setStyleSheet("")
         self.le_3_nParol_2.setInputMask("")
         self.le_3_nParol_2.setText("")
         self.le_3_nParol_2.setMaxLength(22)
@@ -149,6 +401,8 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(12)
         self.tabWidget.setFont(font)
+        self.tabWidget.setAutoFillBackground(False)
+        self.tabWidget.setStyleSheet("")
         self.tabWidget.setObjectName("tabWidget")
         self.tab_4 = QtWidgets.QWidget()
         self.tab_4.setObjectName("tab_4")
@@ -170,6 +424,7 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(16)
         self.clnd.setFont(font)
+        self.clnd.setStyleSheet("")
         self.clnd.setMinimumDate(QtCore.QDate(2020, 1, 14))
         self.clnd.setGridVisible(True)
         self.clnd.setHorizontalHeaderFormat(QtWidgets.QCalendarWidget.LongDayNames)
@@ -214,12 +469,11 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.btn_export_pr.sizePolicy().hasHeightForWidth())
         self.btn_export_pr.setSizePolicy(sizePolicy)
         self.btn_export_pr.setMinimumSize(QtCore.QSize(0, 51))
-        self.btn_export_pr.setMaximumSize(QtCore.QSize(55, 55))
+        self.btn_export_pr.setMaximumSize(QtCore.QSize(155, 55))
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(14)
         self.btn_export_pr.setFont(font)
-        self.btn_export_pr.setText("")
         self.btn_export_pr.setIconSize(QtCore.QSize(32, 32))
         self.btn_export_pr.setObjectName("btn_export_pr")
         self.horizontalLayout_7.addWidget(self.btn_export_pr)
@@ -255,7 +509,6 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.btn_save_sotr.setFont(font)
-        self.btn_save_sotr.setText("")
         self.btn_save_sotr.setIconSize(QtCore.QSize(32, 32))
         self.btn_save_sotr.setObjectName("btn_save_sotr")
         self.horizontalLayout_5.addWidget(self.btn_save_sotr)
@@ -271,7 +524,6 @@ class Ui_MainWindow(object):
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(14)
         self.btn_rasschet.setFont(font)
-        self.btn_rasschet.setText("")
         self.btn_rasschet.setIconSize(QtCore.QSize(32, 32))
         self.btn_rasschet.setObjectName("btn_rasschet")
         self.horizontalLayout_5.addWidget(self.btn_rasschet)
@@ -281,13 +533,12 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.btn_export.sizePolicy().hasHeightForWidth())
         self.btn_export.setSizePolicy(sizePolicy)
-        self.btn_export.setMinimumSize(QtCore.QSize(0, 51))
-        self.btn_export.setMaximumSize(QtCore.QSize(55, 55))
+        self.btn_export.setMinimumSize(QtCore.QSize(155, 51))
+        self.btn_export.setMaximumSize(QtCore.QSize(155, 55))
         font = QtGui.QFont()
         font.setFamily("MS Shell Dlg 2")
         font.setPointSize(14)
         self.btn_export.setFont(font)
-        self.btn_export.setText("")
         self.btn_export.setIconSize(QtCore.QSize(32, 32))
         self.btn_export.setObjectName("btn_export")
         self.horizontalLayout_5.addWidget(self.btn_export)
@@ -313,7 +564,6 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.btn_del_kpi_sotr.setFont(font)
-        self.btn_del_kpi_sotr.setText("")
         self.btn_del_kpi_sotr.setIconSize(QtCore.QSize(32, 32))
         self.btn_del_kpi_sotr.setObjectName("btn_del_kpi_sotr")
         self.horizontalLayout_5.addWidget(self.btn_del_kpi_sotr)
@@ -353,25 +603,9 @@ class Ui_MainWindow(object):
         font.setPointSize(14)
         self.btn_save_vn.setFont(font)
         self.btn_save_vn.setStatusTip("")
-        self.btn_save_vn.setText("")
         self.btn_save_vn.setIconSize(QtCore.QSize(32, 32))
         self.btn_save_vn.setObjectName("btn_save_vn")
         self.horizontalLayout_6.addWidget(self.btn_save_vn)
-        self.btn_load_vn = QtWidgets.QPushButton(self.tab_2)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.btn_load_vn.sizePolicy().hasHeightForWidth())
-        self.btn_load_vn.setSizePolicy(sizePolicy)
-        self.btn_load_vn.setMinimumSize(QtCore.QSize(0, 51))
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        self.btn_load_vn.setFont(font)
-        self.btn_load_vn.setStatusTip("")
-        self.btn_load_vn.setText("")
-        self.btn_load_vn.setIconSize(QtCore.QSize(32, 32))
-        self.btn_load_vn.setObjectName("btn_load_vn")
-        self.horizontalLayout_6.addWidget(self.btn_load_vn)
         self.verticalLayout_7.addLayout(self.horizontalLayout_6)
         self.tabWidget.addTab(self.tab_2, "")
         self.tab_5 = QtWidgets.QWidget()
@@ -428,7 +662,6 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.btn_save_red_kpi.setFont(font)
-        self.btn_save_red_kpi.setText("")
         self.btn_save_red_kpi.setIconSize(QtCore.QSize(32, 32))
         self.btn_save_red_kpi.setObjectName("btn_save_red_kpi")
         self.horizontalLayout_8.addWidget(self.btn_save_red_kpi)
@@ -438,12 +671,11 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.btn_del_red_kpi.sizePolicy().hasHeightForWidth())
         self.btn_del_red_kpi.setSizePolicy(sizePolicy)
-        self.btn_del_red_kpi.setMinimumSize(QtCore.QSize(0, 51))
+        self.btn_del_red_kpi.setMinimumSize(QtCore.QSize(155, 51))
         self.btn_del_red_kpi.setMaximumSize(QtCore.QSize(55, 55))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.btn_del_red_kpi.setFont(font)
-        self.btn_del_red_kpi.setText("")
         self.btn_del_red_kpi.setIconSize(QtCore.QSize(32, 32))
         self.btn_del_red_kpi.setObjectName("btn_del_red_kpi")
         self.horizontalLayout_8.addWidget(self.btn_del_red_kpi)
@@ -453,13 +685,12 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.btn_line_up.sizePolicy().hasHeightForWidth())
         self.btn_line_up.setSizePolicy(sizePolicy)
-        self.btn_line_up.setMinimumSize(QtCore.QSize(0, 51))
+        self.btn_line_up.setMinimumSize(QtCore.QSize(155, 51))
         self.btn_line_up.setMaximumSize(QtCore.QSize(55, 55))
         font = QtGui.QFont()
-        font.setFamily("Wingdings")
+        font.setFamily("MS Shell Dlg 2")
         font.setPointSize(14)
         self.btn_line_up.setFont(font)
-        self.btn_line_up.setText("")
         self.btn_line_up.setIconSize(QtCore.QSize(32, 32))
         self.btn_line_up.setObjectName("btn_line_up")
         self.horizontalLayout_8.addWidget(self.btn_line_up)
@@ -469,12 +700,11 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.btn_dell_line.sizePolicy().hasHeightForWidth())
         self.btn_dell_line.setSizePolicy(sizePolicy)
-        self.btn_dell_line.setMinimumSize(QtCore.QSize(0, 51))
+        self.btn_dell_line.setMinimumSize(QtCore.QSize(155, 51))
         self.btn_dell_line.setMaximumSize(QtCore.QSize(55, 55))
         font = QtGui.QFont()
         font.setPointSize(14)
         self.btn_dell_line.setFont(font)
-        self.btn_dell_line.setText("")
         self.btn_dell_line.setIconSize(QtCore.QSize(32, 32))
         self.btn_dell_line.setObjectName("btn_dell_line")
         self.horizontalLayout_8.addWidget(self.btn_dell_line)
@@ -530,7 +760,6 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.btn_save_struktura.setFont(font)
-        self.btn_save_struktura.setText("")
         self.btn_save_struktura.setIconSize(QtCore.QSize(32, 32))
         self.btn_save_struktura.setObjectName("btn_save_struktura")
         self.verticalLayout_12.addWidget(self.btn_save_struktura)
@@ -567,7 +796,6 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         self.btn_save_prava.setFont(font)
-        self.btn_save_prava.setText("")
         self.btn_save_prava.setIconSize(QtCore.QSize(32, 32))
         self.btn_save_prava.setObjectName("btn_save_prava")
         self.verticalLayout_6.addWidget(self.btn_save_prava)
@@ -575,7 +803,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.addWidget(self.tabWidget)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1265, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1265, 18))
         self.menubar.setObjectName("menubar")
         self.menu = QtWidgets.QMenu(self.menubar)
         self.menu.setObjectName("menu")
@@ -615,28 +843,39 @@ class Ui_MainWindow(object):
         self.l_3.setText(_translate("MainWindow", "КПЭпроизводство:"))
         self.l_kpi_pr.setText(_translate("MainWindow", "КПЭотд."))
         self.btn_export_pr.setToolTip(_translate("MainWindow", "Экспорт"))
+        self.btn_export_pr.setText(_translate("MainWindow", "Экспорт"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Дата"))
         self.btn_save_sotr.setToolTip(_translate("MainWindow", "Сохранить КПЭ"))
+        self.btn_save_sotr.setText(_translate("MainWindow", "Сохранить"))
         self.btn_rasschet.setToolTip(_translate("MainWindow", "Рассчет КПЭ"))
-        self.btn_export.setToolTip(_translate("MainWindow", "Экспорт"))
+        self.btn_rasschet.setText(_translate("MainWindow", "Пересчет"))
+        self.btn_export.setToolTip(_translate("MainWindow", "Экспорт в word"))
+        self.btn_export.setText(_translate("MainWindow", "Экспорт"))
         self.btn_del_kpi_sotr.setToolTip(_translate("MainWindow", "Удалить КПЭ сотрудника на выбранный период."))
+        self.btn_del_kpi_sotr.setText(_translate("MainWindow", "Удалить"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "КПЭсотр."))
         self.l_tek_otd.setText(_translate("MainWindow", "Отдел"))
         self.btn_save_vn.setToolTip(_translate("MainWindow", "Сохранить"))
-        self.btn_load_vn.setToolTip(_translate("MainWindow", "Загрузить"))
+        self.btn_save_vn.setText(_translate("MainWindow", "Сохранить"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "КПЭвнеш."))
         self.btn_utverg.setToolTip(_translate("MainWindow", "Утверждение"))
         self.btn_save_red_kpi.setToolTip(_translate("MainWindow", "Сохранить"))
-        self.btn_del_red_kpi.setToolTip(_translate("MainWindow", "Удалить"))
+        self.btn_save_red_kpi.setText(_translate("MainWindow", "Сохранить"))
+        self.btn_del_red_kpi.setToolTip(_translate("MainWindow", "Очистить таблицу, оформтиь по номому шаблону"))
+        self.btn_del_red_kpi.setText(_translate("MainWindow", "Очистить"))
         self.btn_line_up.setToolTip(_translate("MainWindow", "Поднять строку на уровень вверх"))
+        self.btn_line_up.setText(_translate("MainWindow", "Вверх"))
         self.btn_dell_line.setToolTip(_translate("MainWindow", "Удалить строку"))
+        self.btn_dell_line.setText(_translate("MainWindow", "Удалить"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), _translate("MainWindow", "Редактор КПЭ"))
         self.groupBox_3.setTitle(_translate("MainWindow", "Подразделение"))
         self.groupBox_4.setTitle(_translate("MainWindow", "Фильтр не оцениваемых сотрудников"))
         self.btn_save_struktura.setToolTip(_translate("MainWindow", "Сохранить"))
+        self.btn_save_struktura.setText(_translate("MainWindow", "Сохранить"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_6), _translate("MainWindow", "Структура"))
         self.groupBox_5.setTitle(_translate("MainWindow", "Права"))
         self.btn_save_prava.setToolTip(_translate("MainWindow", "Сохранить"))
+        self.btn_save_prava.setText(_translate("MainWindow", "Сохранить"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_7), _translate("MainWindow", "Настройка"))
         self.menu.setTitle(_translate("MainWindow", "Опции"))
         self.action_new_user.setText(_translate("MainWindow", "Новый пользователь"))

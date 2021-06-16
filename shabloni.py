@@ -1,5 +1,6 @@
 import Cust_Functions as F
 from PyQt5 import QtWidgets
+from PyQt5.QtGui import QIcon
 
 
 def vibor_shablon_rabotn(self):
@@ -21,32 +22,54 @@ def vibor_shablon_rabotn(self):
 
 
 def zapolit_tabl_shablon(self, spis):
+    tbl = self.ui.tbl_red_kpi
     edit = {i for i in range(len(spis[0]))}
-    F.zapoln_wtabl(self, spis, self.ui.tbl_red_kpi, 0, edit, (), (), 200, True, '')
-    self.ui.tbl_red_kpi.setColumnWidth(1, 450)
-    self.ui.tbl_red_kpi.setColumnWidth(0, 300)
-    self.ui.tbl_red_kpi.setColumnWidth(7, 150)
-    self.ui.tbl_red_kpi.setColumnWidth(8, 300)
-    for i in range(1, self.ui.tbl_red_kpi.rowCount()):
+    F.zapoln_wtabl(self, spis, tbl, 0, edit, (), (), 200, True, '')
+    tbl.setColumnWidth(F.nom_kol_po_im_v_shap(spis, 'Наименование КПЭ'), 350)
+    tbl.setColumnWidth(F.nom_kol_po_im_v_shap(spis, 'Цель'), 250)
+    tbl.setColumnWidth(F.nom_kol_po_im_v_shap(spis, 'Методика расчета'), 295)
+    tbl.setColumnWidth(F.nom_kol_po_im_v_shap(spis, 'Примечание'), 305)
+    tbl.setColumnWidth(F.nom_kol_po_im_v_shap(spis, 'Вес КПЭ'), 96)
+    tbl.setColumnWidth(F.nom_kol_po_im_v_shap(spis, 'Тип КПЭ'), 128)
+
+    F.font_size(tbl, F.nom_kol_po_im_v_shap(spis, 'Цель'), 12)
+    F.font_size(tbl, F.nom_kol_po_im_v_shap(spis, 'Наименование КПЭ'), 10)
+    F.font_size(tbl, F.nom_kol_po_im_v_shap(spis, 'Методика расчета'), 10)
+    F.font_size(tbl, F.nom_kol_po_im_v_shap(spis, 'Примечание'), 10)
+    F.font_size(tbl, F.nom_kol_po_im_v_shap(spis, 'Уров.вып.№1'), 18)
+    F.font_size(tbl, F.nom_kol_po_im_v_shap(spis, 'Уров.вып.№2'), 18)
+    F.font_size(tbl, F.nom_kol_po_im_v_shap(spis, 'Уров.вып.№3'), 18)
+
+    for i in range(1, tbl.rowCount()):
         combo = QtWidgets.QComboBox()
         combo.addItem("")
         for item in self.KPITIPS:
             combo.addItem(item)
-            if self.ui.tbl_red_kpi.item(i, 7).text() == item:
+            if tbl.item(i, 7).text() == item:
                 combo.setCurrentText(item)
         combo.currentIndexChanged.connect((lambda: onstatechanged_dolya(self)))
-        self.ui.tbl_red_kpi.setCellWidget(i, 7, combo)
+        tbl.setCellWidget(i, 7, combo)
 
         combo2 = QtWidgets.QComboBox()
         combo2.addItem("")
         for item in self.PROC:
             combo2.addItem(item)
-            if self.ui.tbl_red_kpi.item(i, 6).text() == item:
+            if tbl.item(i, 6).text() == item:
                 combo2.setCurrentText(item)
         combo2.currentIndexChanged.connect((lambda: onstatechanged_tip(self)))
-        self.ui.tbl_red_kpi.setCellWidget(i, 6, combo2)
-    F.cvet_cell_wtabl(self.ui.tbl_red_kpi, '', '', '-')
-    self.ui.tbl_red_kpi.resizeRowsToContents()
+        tbl.setCellWidget(i, 6, combo2)
+    F.cvet_cell_wtabl(tbl, '', '', '-')
+    if tbl.item(0, F.nom_kol_po_imen(tbl, 'Примечание')).text() == 'Утверждено':
+        F.ust_color_wtab(tbl, 0, F.nom_kol_po_imen(tbl, 'Примечание'), 200, 255, 200)
+        self.ui.btn_utverg.setIcon(
+            QIcon(QtWidgets.QApplication.style().standardIcon(
+                QtWidgets.QStyle.SP_BrowserReload)))  # QStyle.SP_VistaShield
+    else:
+        F.ust_color_wtab(tbl, 0, F.nom_kol_po_imen(tbl, 'Примечание'), 220, 220, 220)
+        self.ui.btn_utverg.setIcon(
+            QIcon(
+                QtWidgets.QApplication.style().standardIcon(QtWidgets.QStyle.SP_VistaShield)))  # QStyle.SP_VistaShield
+    tbl.resizeRowsToContents()
 
 
 def onstatechanged_dolya(self):
@@ -75,8 +98,10 @@ def onstatechanged_tip(self):
 def proverka_red_kpi(self):
     for j in range(2):
         self.ui.tbl_red_kpi.item(0, j).setText('-')
-    for j in range(6, self.ui.tbl_red_kpi.columnCount()):
+    for j in range(6, self.ui.tbl_red_kpi.columnCount() - 1):
         self.ui.tbl_red_kpi.item(0, j).setText('-')
+    if self.ui.tbl_red_kpi.item(0, self.ui.tbl_red_kpi.columnCount() - 1).text() != 'Утверждено':
+        self.ui.tbl_red_kpi.item(0, self.ui.tbl_red_kpi.columnCount() - 1).setText('-')
     for j in range(3, 6):
         if not F.is_numeric(self.ui.tbl_red_kpi.item(0, j).text()):
             self.showdialog(f'{self.shapka_shablonkpi[0][j]} не является числом')
@@ -176,9 +201,14 @@ def proverka_stroki_zap(self, i):
     return True
 
 
-def save_red_kpi(self):
+def save_red_kpi(self, forsir=False):
     if self.windowTitle() == "Расчет КПЭ":
         return
+    if forsir == False:
+        if check_utverg(self) == True:
+            self.showdialog(
+                f'Утвержденный документ изменить нельзя')
+            return
     rez = proverka_red_kpi(self)
     if not rez:
         return
@@ -195,6 +225,10 @@ def save_red_kpi(self):
 def del_red_kpi(self):
     if self.windowTitle() == "Расчет КПЭ":
         return
+    if check_utverg(self) == True:
+        self.showdialog(
+            f'Утвержденный документ изменить нельзя')
+        return
     rez = self.showdialogYN(f'Будет сброшен шаблон для {self.ui.cmb_dolgn_red.currentText()}')
     if rez == 1024:  # no 4194304
         F.udal_file(F.scfg(
@@ -207,6 +241,12 @@ def del_red_kpi(self):
 
 
 def dell_line(self):
+    if self.windowTitle() == "Расчет КПЭ":
+        return
+    if check_utverg(self) == True:
+        self.showdialog(
+            f'Утвержденный документ изменить нельзя')
+        return
     if self.ui.tbl_red_kpi.currentIndex().row() <= 0:
         return
     if self.ui.tbl_red_kpi.currentIndex().row() == self.ui.tbl_red_kpi.rowCount() - 1:
@@ -223,6 +263,12 @@ def dell_line(self):
 
 
 def line_up(self):
+    if self.windowTitle() == "Расчет КПЭ":
+        return
+    if check_utverg(self) == True:
+        self.showdialog(
+            f'Утвержденный документ изменить нельзя')
+        return
     sel = self.ui.tbl_red_kpi.currentIndex().row() + 1
     if sel < 3:
         return
@@ -231,3 +277,24 @@ def line_up(self):
     spis_tmp[sel], spis_tmp[sel - 1] = spis_tmp[sel - 1], spis_tmp[sel]
     zapolit_tabl_shablon(self, spis_tmp)
     self.ui.tbl_red_kpi.setCurrentCell(sel - 2, kol)
+
+
+def set_utverg_on(self):
+    tbl = self.ui.tbl_red_kpi
+    if self.windowTitle() == "Расчет КПЭ":
+        return
+    rez = proverka_red_kpi(self)
+    if not rez:
+        return
+    else:
+        if tbl.item(0, F.nom_kol_po_imen(tbl, 'Примечание')).text() == 'Утверждено':
+            tbl.item(0, F.nom_kol_po_imen(tbl, 'Примечание')).setText('-')
+        else:
+            tbl.item(0, F.nom_kol_po_imen(tbl, 'Примечание')).setText('Утверждено')
+    save_red_kpi(self, True)
+
+
+def check_utverg(self):
+    if self.ui.tbl_red_kpi.item(0, F.nom_kol_po_imen(self.ui.tbl_red_kpi, 'Примечание')).text() == 'Утверждено':
+        return True
+    return False

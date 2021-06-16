@@ -47,6 +47,7 @@ class Mywindow(QtWidgets.QMainWindow):
         self.ui.btn_export.clicked.connect(lambda: kps.export(self))
         self.ui.btn_export_pr.clicked.connect(self.export_pr)
         self.ui.btn_save_prava.clicked.connect(lambda: aut.save_prava(self))
+        self.ui.btn_utverg.clicked.connect(lambda: shabl.set_utverg_on(self))
 
     def showdialog(self, msg):
         msg_box = QtWidgets.QMessageBox()
@@ -75,11 +76,14 @@ class Mywindow(QtWidgets.QMainWindow):
         self.ui.le_3_nParol.setVisible(False)
         self.ui.le_3_nParol_2.setVisible(False)
         self.spis_emploe = F.otkr_f(F.tcfg('employee'), True, ',')
-        F.ust_cvet_videl_tab(self.ui.tbl_struktura)
-        F.ust_cvet_videl_tab(self.ui.tbl_red_kpi)
-        F.ust_cvet_videl_tab(self.ui.tbl_kpi_sotr)
-        F.ust_cvet_videl_tab(self.ui.tbl_kpi_vnesh)
-        F.ust_cvet_videl_tab(self.ui.clnd)
+        F.ust_cvet_videl_tab(self.ui.tbl_struktura, 247, 175, 42)
+        F.ust_cvet_videl_tab(self.ui.tbl_red_kpi, 247, 175, 42)
+        F.ust_cvet_videl_tab(self.ui.tbl_kpi_sotr, 247, 175, 42)
+        F.ust_cvet_videl_tab(self.ui.tbl_kpi_vnesh, 247, 175, 42)
+        F.ust_cvet_videl_tab(self.ui.clnd, 247, 175, 42)
+        F.ust_cvet_videl_tab(self.ui.cmb_empl, 247, 175, 42)
+        F.ust_cvet_videl_tab(self.ui.cmb_rabotn, 247, 175, 42)
+        F.ust_cvet_videl_tab(self.ui.cmb_dolgn_red, 247, 175, 42)
 
         self.spis_str_emploee = []
         flag_naid = False
@@ -116,6 +120,7 @@ class Mywindow(QtWidgets.QMainWindow):
         self.ui.l_img.setPixmap(pixmap)
 
         self.ui.tabWidget.setTabVisible(6, False)  # настрокика
+        self.ui.btn_utverg.setEnabled(False)
 
     def app_icons(self):
         self.ui.btn_login.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogYesButton)))
@@ -127,14 +132,13 @@ class Mywindow(QtWidgets.QMainWindow):
         self.ui.btn_save_struktura.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton)))
         self.ui.btn_save_red_kpi.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton)))
         self.ui.btn_save_vn.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton)))
-        self.ui.btn_load_vn.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogOpenButton)))
         self.ui.btn_save_sotr.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton)))
         self.ui.btn_rasschet.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_FileDialogDetailedView)))
         self.ui.btn_del_kpi_sotr.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogDiscardButton)))
         self.ui.btn_export.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DriveHDIcon)))
         self.ui.btn_export_pr.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DriveHDIcon)))
         self.ui.btn_utverg.setIcon(
-            QIcon(QApplication.style().standardIcon(QStyle.SP_BrowserReload)))  # QStyle.SP_VistaShield
+            QIcon(QApplication.style().standardIcon(QStyle.SP_VistaShield)))  # QStyle.SP_BrowserReload
         self.ui.btn_save_prava.setIcon(QIcon(QApplication.style().standardIcon(QStyle.SP_DialogSaveButton)))
 
     def keyReleaseEvent(self, e):
@@ -184,6 +188,10 @@ class Mywindow(QtWidgets.QMainWindow):
     def tab_click4(self):
         aut.load_strukt(self)
         self.load_combo()
+        if self.prava('Утверждение') == True:
+            self.ui.btn_utverg.setEnabled(True)
+        else:
+            self.ui.btn_utverg.setEnabled(False)
 
     def tab_click3(self):
         vnsh.zapoln_vnsh_tabl(self)
@@ -233,6 +241,9 @@ class Mywindow(QtWidgets.QMainWindow):
 
     def export_pr(self):
         if self.windowTitle() == "Расчет КПЭ":
+            return
+        if self.prava('Выгрузка') == False:
+            self.showdialog("Нет прав на выгрузку")
             return
         if F.nalich_file(os.path.join("icons", "Шаблон_п.docx")) == False:
             self.showdialog("шаблон не найден")
@@ -349,6 +360,18 @@ class Mywindow(QtWidgets.QMainWindow):
 
     def fio(self, strok: str):
         return " ".join(strok.split(' ')[:3])
+
+    def prava(self, vid: str, fio=''):
+        if fio == '':
+            fio = self.windowTitle()
+        if F.nalich_file(F.scfg('strukt') + F.sep() + 'conf.pickle'):
+            spis = F.otkr_f(F.scfg('strukt') + F.sep() + 'conf.pickle', False, "", True)
+            for i in range(len(spis)):
+                if spis[i][F.nom_kol_po_im_v_shap(spis, 'ФИО')] == fio:
+                    if spis[i][F.nom_kol_po_im_v_shap(spis, vid)] != '':
+                        return True
+                    return False
+            return False
 
 
 app = QtWidgets.QApplication([])

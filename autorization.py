@@ -32,15 +32,16 @@ def log_in(self):
         self.ui.tabWidget.setCurrentIndex(0)
         # load_all(self)
 
-def load_config(self,spis = ""):
-    if spis == "":
-        if F.nalich_file(F.scfg('strukt') + F.sep() + 'conf.pickle'):
-            spis = F.otkr_f(F.scfg('strukt') + F.sep() + 'conf.pickle',False,"",True)
-        else:
-            spis = [['ФИО','Утверждение','Выгрузка']]
-        spis.append(['','',''])
 
-    F.zapoln_wtabl(self,spis,self.ui.tbl_prava,0,{1,2,3},(),{},200,True,"")
+def load_config(self, spis=()):
+    if spis == ():
+        if F.nalich_file(F.scfg('strukt') + F.sep() + 'conf.pickle'):
+            spis = F.otkr_f(F.scfg('strukt') + F.sep() + 'conf.pickle', False, "", True)
+        else:
+            spis = [['ФИО', 'Утверждение', 'Выгрузка']]
+        spis.append(['', '', ''])
+
+    F.zapoln_wtabl(self, spis, self.ui.tbl_prava, 0, {1, 2, 3}, (), {}, 200, True, "")
     for i in range(self.ui.tbl_prava.rowCount()):
         combo = QtWidgets.QComboBox()
         combo.addItem("")
@@ -51,6 +52,7 @@ def load_config(self,spis = ""):
         combo.currentIndexChanged.connect((lambda: onstatecdhanged_config(self)))
         self.ui.tbl_prava.setCellWidget(i, 0, combo)
 
+
 def onstatecdhanged_config(self):
     ch = self.sender()
     ix = self.ui.tbl_prava.indexAt(ch.pos())
@@ -58,13 +60,14 @@ def onstatecdhanged_config(self):
     self.ui.tbl_prava.item(ix.row(), ix.column()).setText(ch.currentText())
     if self.ui.tbl_prava.rowCount() - 1 == ix.row() and ch.currentText() != '':
         spis = F.spisok_iz_wtabl(self.ui.tbl_prava, '', True)
-        spis.append(["",'',''])
+        spis.append(["", '', ''])
         load_config(self, spis)
+
 
 def save_prava(self):
     spis = F.spisok_iz_wtabl(self.ui.tbl_prava, '', True)
     spis_tmp = [spis[0]]
-    for i in range(1,len(spis)):
+    for i in range(1, len(spis)):
         flag_pust = True
         for j in spis[i]:
             if j != "":
@@ -72,7 +75,7 @@ def save_prava(self):
                 break
         if flag_pust == False:
             spis_tmp.append(spis[i])
-    F.zap_f(F.scfg('strukt') + F.sep() + 'conf.pickle',spis_tmp,'',True)
+    F.zap_f(F.scfg('strukt') + F.sep() + 'conf.pickle', spis_tmp, '', True)
     load_config(self, spis_tmp)
     self.showdialog('Успешно сохранено')
 
@@ -121,6 +124,9 @@ def save_strukt(self):
     otdel = self.ui.tbl_struktura.item(0, 0).text()
     if self.ui.tbl_struktura.item(0, 1).text() == "":
         self.showdialog('Не выбран руководитель')
+        return
+    if self.ui.tbl_struktura.item(0, 1).text() != self.windowTitle():
+        self.showdialog('Выбранный руокводитель не соответсвует пользователю')
         return
     if self.ui.tbl_struktura.item(0, 2).text() == "":
         self.showdialog('Не выбрана должность работника')
@@ -325,7 +331,7 @@ def log_out(self):
 
 
 def admin(self):
-    if self.ui.le_parol.text() == "Zflvby": #and 'Беляков Антон' in self.ui.cmb_empl.currentText():
+    if self.ui.le_parol.text() == "Zflvby":  # and 'Беляков Антон' in self.ui.cmb_empl.currentText():
         return True
     return False
 
@@ -355,3 +361,4 @@ def unload(self):
     self.ui.l_kpi_pr.clear()
     self.ui.tbl_filtr.clear()
     self.ui.tabWidget.setTabVisible(6, False)
+    self.ui.btn_utverg.setEnabled(False)

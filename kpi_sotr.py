@@ -1,8 +1,9 @@
 import Cust_Functions as F
 import autorization as aut
-#import comtypes.client
+# import comtypes.client
 from docxtpl import DocxTemplate
 import os
+
 
 def set_rabotn(self):
     if self.windowTitle() == "Расчет КПЭ":
@@ -206,6 +207,7 @@ def del_kpi_sotr(self):
                         f'никак.')
         aut.load_combo_sotr(self, self.ui.cmb_rabotn.currentIndex())
 
+
 def export(self):
     if self.windowTitle() == "Расчет КПЭ":
         return
@@ -214,26 +216,25 @@ def export(self):
         return
     rasschet_sotr(self)
     msg = ""
-    sch= 0
+    sch = 0
     spis = F.spisok_iz_wtabl(self.ui.tbl_kpi_sotr, '', True)
-    kol_cel = F.nom_kol_po_im_v_shap(spis,"Цель")
+    kol_cel = F.nom_kol_po_im_v_shap(spis, "Цель")
     kol_naim = F.nom_kol_po_im_v_shap(spis, "Наименование КПЭ")
     kol_ed = F.nom_kol_po_im_v_shap(spis, "Ед. изм.")
     kol_fact = F.nom_kol_po_im_v_shap(spis, 'Факт. вып.')
     i = 0
-    msg += f'{vpisat("№",2)}|{vpisat(spis[i][kol_cel],22)}|{vpisat(spis[i][kol_naim],60)}|{vpisat(spis[i][kol_ed],10)}|{vpisat(spis[i][kol_fact],10)}\n'
-    msg += f'{vpisat("-", 2,znac= "-")}|{vpisat("-", 22,znac= "-")}|' \
-           f'{vpisat("-", 60,znac= "-")}|{vpisat("-", 10,znac= "-")}|' \
-           f'{vpisat("-", 10,znac= "-")}\n'
+    msg += f'{vpisat("№", 2)}|{vpisat(spis[i][kol_cel], 22)}|{vpisat(spis[i][kol_naim], 60)}|{vpisat(spis[i][kol_ed], 10)}|{vpisat(spis[i][kol_fact], 10)}\n'
+    msg += f'{vpisat("-", 2, znac="-")}|{vpisat("-", 22, znac="-")}|' \
+           f'{vpisat("-", 60, znac="-")}|{vpisat("-", 10, znac="-")}|' \
+           f'{vpisat("-", 10, znac="-")}\n'
 
     for i in range(2, len(spis)):
-        sch +=1
-        msg += f'{vpisat(str(sch),2)}|{vpisat(spis[i][kol_cel],22)}|{vpisat(spis[i][kol_naim],60)}|{vpisat(spis[i][kol_ed],10)}|{vpisat(spis[i][kol_fact],10)}\n'
+        sch += 1
+        msg += f'{vpisat(str(sch), 2)}|{vpisat(spis[i][kol_cel], 22)}|{vpisat(spis[i][kol_naim], 60)}|{vpisat(spis[i][kol_ed], 10)}|{vpisat(spis[i][kol_fact], 10)}\n'
 
     doc = DocxTemplate(os.path.join("icons", "шаблон.docx"))
     context = {'emploe': self.ui.cmb_rabotn.currentText(), 'period': self.ui.l_period.text(), 'kpi': msg,
                'itog': self.ui.l_raschet.text(), 'now': F.now()}
-
 
     doc.render(context)
     if F.nalich_file(F.put_po_umolch() + os.sep + 'КПЭ' + os.sep) == False:
@@ -242,25 +243,26 @@ def export(self):
     doc.save(putf)
     F.zapyst_file(putf)
     return
-    #wdFormatPDF = 17
+    # wdFormatPDF = 17
     #
-    #in_file = os.path.abspath("final.docx")
-    #out_file = os.path.abspath("final.pdf")
+    # in_file = os.path.abspath("final.docx")
+    # out_file = os.path.abspath("final.pdf")
     #
-    #word = comtypes.client.CreateObject('Word.Application')
-    #doc = word.Documents.Open(in_file)
-    #doc.SaveAs(out_file, FileFormat=wdFormatPDF)
-    #doc.Close()
-    #word.Quit()
+    # word = comtypes.client.CreateObject('Word.Application')
+    # doc = word.Documents.Open(in_file)
+    # doc.SaveAs(out_file, FileFormat=wdFormatPDF)
+    # doc.Close()
+    # word.Quit()
 
-def vpisat(text,dl,orient=0,znac = " "):
+
+def vpisat(text, dl, orient=0, znac=" "):
     text = str(text)
-    text = text.strip().replace('\n','')
+    text = text.strip().replace('\n', '')
     text = text[:dl]
 
     if orient == 1:
-        if (dl - len(text))%2 > 0:
-            itog = f'{znac*(((dl - len(text))//2)+1)}{text}{znac*((dl - len(text))//2)}'
+        if (dl - len(text)) % 2 > 0:
+            itog = f'{znac * (((dl - len(text)) // 2) + 1)}{text}{znac * ((dl - len(text)) // 2)}'
         else:
             itog = f'{znac * (((dl - len(text)) / 2) + 1)}{text}{znac * ((dl - len(text)) / 2)}'
     if orient == 0:

@@ -15,7 +15,7 @@ def log_in(self):
         self.ui.tabWidget.setTabVisible(6, True)
         flag_log_in = True
     if not flag_log_in:
-        rez_challenge = True  # check_pass(self.ui.cmb_empl.currentText(), self.ui.le_parol.text())
+        rez_challenge = check_pass(self.ui.cmb_empl.currentText(), self.ui.le_parol.text())
         if rez_challenge is False:
             # F.msgbox('Не верный пароль')
             self.showdialog('Не верный пароль')
@@ -171,7 +171,8 @@ def load_filtr(self):
 def zapoln_filtr(self, spis):
     edit = {}
     F.zapoln_wtabl(self, spis, self.ui.tbl_filtr, 0, edit, (), (), 200, True, '')
-    # self.ui.tbl_filtr.setColumnWidth(0, 400)
+    self.ui.tbl_filtr.setColumnWidth(0, 400)
+    self.ui.tbl_filtr.horizontalHeader().setStretchLastSection(True)
     spis_tmp = F.otkr_f(F.scfg('strukt') + F.sep() + self.windowTitle() + F.sep() + 'filtr.pickle', pickl=True)
     spis_tmp_tek = F.spisok_iz_wtabl(self.ui.tbl_struktura)
     spis_tmp_tek2 = []
@@ -229,6 +230,7 @@ def load_strukt(self):
 def zapoln_red_tab(self, spis):
     edit = {0, 1, 2}
     F.zapoln_wtabl(self, spis, self.ui.tbl_struktura, 0, edit, (), (), 200, True, '')
+    self.ui.tbl_struktura.setColumnWidth(F.nom_kol_po_im_v_shap(spis, 'Отдел'), 200)
     self.ui.tbl_struktura.setColumnWidth(1, 400)
     self.spis_dolg_filtr = []
     for i in range(self.ui.tbl_struktura.rowCount()):

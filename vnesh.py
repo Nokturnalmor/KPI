@@ -52,33 +52,41 @@ def zapoln_vnsh_tabl(self):
                                 spis[i][j] = spis_vn[x][spis[i][0]][y][0]
     nom_tek_otdel = 0
     F.zapoln_wtabl(self, spis, self.ui.tbl_kpi_vnesh, 0, 0, (), (), 200, False, "")
-    F.ust_cvet_obj(self.ui.tbl_kpi_vnesh)
+    #F.ust_cvet_obj(self.ui.tbl_kpi_vnesh)
     for i in range(self.ui.tbl_kpi_vnesh.rowCount()):  # ткущий отдел
         if self.ui.tbl_kpi_vnesh.item(i, 0).text() == self.ui.l_tek_otd.text():
             nom_tek_otdel = i
             for j in range(self.ui.tbl_kpi_vnesh.columnCount()):
-                F.ust_color_wtab(self.ui.tbl_kpi_vnesh, i, j, 255, 235, 255)
+                F.dob_color_wtab(self.ui.tbl_kpi_vnesh, i, j, 55, 35, 0)
+                pass
     for i in range(self.ui.tbl_kpi_vnesh.columnCount()):  # диагональ
-        F.ust_color_wtab(self.ui.tbl_kpi_vnesh, i, i, 200, 200, 200)
+        F.ust_color_wtab(self.ui.tbl_kpi_vnesh, i, i, 23, 28, 31)
+        pass
     for i in range(1, 4):  # ширина стоблбов
         self.ui.tbl_kpi_vnesh.setColumnWidth(i,
                                              (self.ui.tbl_kpi_vnesh.width() - self.ui.tbl_kpi_vnesh.columnWidth(0)) / 3)
     for i in range(self.ui.tbl_kpi_vnesh.columnCount(),
                    self.ui.tbl_kpi_vnesh.columnCount() + 10):  # редакатир столбцы зам
+        F.dob_color_wtab(self.ui.tbl_kpi_vnesh, i, 0, 73, 28, 31)
         for j in range(1, self.ui.tbl_kpi_vnesh.columnCount()):
+            F.dob_color_wtab(self.ui.tbl_kpi_vnesh, i, j, 73, 28, 31)
             if j != nom_tek_otdel:
                 self.ui.tbl_kpi_vnesh.item(i, j).setFlags(
                     QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsEditable)
-                F.ust_color_wtab(self.ui.tbl_kpi_vnesh, i, j, 255, 255, 255)
-        F.ust_color_wtab(self.ui.tbl_kpi_vnesh, i, 0, 255, 200, 200)
+            else:
+                F.ust_color_wtab(self.ui.tbl_kpi_vnesh, i, j, 23, 28, 31)
+
     for i in range(self.ui.tbl_kpi_vnesh.columnCount() + 10,
                    self.ui.tbl_kpi_vnesh.rowCount()):  # редакатир столбцы поощ
+        F.dob_color_wtab(self.ui.tbl_kpi_vnesh, i, 0, 23, 78, 31)
         for j in range(1, self.ui.tbl_kpi_vnesh.columnCount()):
+            F.dob_color_wtab(self.ui.tbl_kpi_vnesh, i, j, 23, 78, 31)
             if j != nom_tek_otdel:
                 self.ui.tbl_kpi_vnesh.item(i, j).setFlags(
                     QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsEditable)
-                F.ust_color_wtab(self.ui.tbl_kpi_vnesh, i, j, 255, 255, 255)
-        F.ust_color_wtab(self.ui.tbl_kpi_vnesh, i, 0, 200, 255, 200)
+            else:
+                F.ust_color_wtab(self.ui.tbl_kpi_vnesh, i, j, 23, 28, 31)
+
 
 
 def spispok_otdelov(self, ruc=False):

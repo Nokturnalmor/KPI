@@ -15,7 +15,7 @@ import sys
 
 
 # pyuic5 P:\Python\GUI\mydesign.ui -o P:\Python\GUI\mydesign.py
-# pyinstaller.exe --onefile --noconsole KPI.py
+# pyinstaller.exe --onefile --icon=psd.ico --noconsole KPI.py
 class Mywindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(Mywindow, self).__init__()
